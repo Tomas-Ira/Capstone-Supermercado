@@ -1,6 +1,7 @@
 from sys import argv
 import pandas as pd
 import numpy as np
+from collections import defaultdict
 import csv
 
 class Ticket:
@@ -20,18 +21,21 @@ class Product:
         self.id = id
         self.tickets = set()
         self.popularity = 0
-        self.in_common = {}
+        self.in_common = defaultdict(int)
 
     def add_ticket(self, ticket):
         self.tickets.add(ticket)
         self.popularity += 1
 
-    def common(self, other):
-        common = 0
+    def create_in_common(self):
         for ticket in self.tickets:
-            if ticket.has_both(self, other):
-                common += 1
-        return common
+            for product in ticket.products:
+                if product != self:
+                    self.in_common[product.id] += 1
+    def show(self):
+        print("ID:", self.id, "Popularidad:", self.popularity)
+        print("En comun:", self.in_common)
+
 
 all_tickets = dict()
 all_products = dict()
@@ -47,13 +51,14 @@ def leer_datos():
             new_ticket.add_product(all_products[prod])
 
 
-def obtener_popularidades():
+def mostrar():
     for id in all_products:
-        print("ID:", id, "Popularidad:", all_products[id].popularity)
+        all_products[id].show()
 
 def armar_relaciones():
     for i in all_products:
-        all_products[i]
+        all_products[i].create_in_common()
 
 leer_datos()
-obtener_popularidades()
+armar_relaciones()
+mostrar()
