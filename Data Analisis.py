@@ -20,8 +20,8 @@ class Product:
     def __init__(self, id):
         self.id = id
         self.tickets = set()
-        self.popularity = 0
-        self.in_common = defaultdict(int)
+        self.popularity = 0 # Muestra en cuantas boletas aparece un producto
+        self.in_common = defaultdict(int) # Cada Producto (key) tiene como valor el número de boletas que comparte con el producto self
 
     def add_ticket(self, ticket):
         self.tickets.add(ticket)
