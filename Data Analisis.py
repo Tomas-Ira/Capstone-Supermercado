@@ -33,32 +33,43 @@ class Product:
                 if product != self:
                     self.in_common[product.id] += 1
     def show(self):
-        print("ID:", self.id, "Popularidad:", self.popularity)
-        print("En comun:", self.in_common)
+        print(self.id, self.popularity)
+        #print("En comun:", self.in_common)
 
+    def more_popular(self, contador):
+        if self.popularity > 1:
+            contador += 1
+        return contador
 
 all_tickets = dict()
 all_products = dict()
 
-def leer_datos():
+def leer_datos(ventas):
     DATA = [i.strip().split() for i in open("./Data/retail.dat").readlines()]
     for tic in range(len(DATA)):
         new_ticket = Ticket(tic)
         all_tickets[tic] = new_ticket
         for prod in DATA[tic]:
+            ventas += 1
             if prod not in all_products:
                 all_products[prod] = Product(prod)
             new_ticket.add_product(all_products[prod])
-
-
-def mostrar():
-    for id in all_products:
-        all_products[id].show()
+    return ventas
 
 def armar_relaciones():
     for i in all_products:
         all_products[i].create_in_common()
 
-leer_datos()
+def popular():
+    big = 0
+    for id in all_products:
+        big = all_products[id].more_popular(big)
+    return big
+
+
+ventas = leer_datos(0)
 armar_relaciones()
-mostrar()
+print ("VENTAS", ventas)
+print("TICKETS", len(all_tickets))
+print("PRODUCTOS", len(all_products))
+print("1 Time Sales", popular())
