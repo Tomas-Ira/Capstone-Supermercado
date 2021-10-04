@@ -242,20 +242,29 @@ def calcular_distancia(lista_supermercados, n=1000, nombre_archivo='distancias_r
 
     Output
     * retorna lista de diccionarios de las distancias recorridas en cada supermercado, KEYS: {promedio, max, min}.
-    * además imprime datos en un archivo
+    * además imprime datos en un archivo de nombre 'nombre_archivo'.
     '''
     boletas = generar_muestra(n)
     cont = 1
-    for super in lista_supermercados:
-        print(" - Supermercado {cont} - ")
-        visitas_por_pasillo = contador_visitas_por_pasillo(super, boletas)
-        distancias = [distancia_recorrida(super, x) for x in boletas]
-        distancias_clean = [i for i in distancias if i!= 0]
-        promedio = str(int(stat.mean(distancias_clean)))
-        print("\tDistancia promedio: " + promedio)
-        print("\tDistancia max: " + str(max(distancias_clean)))
-        print("\tDistancia min: " + str(min(distancias_clean)))
-        dict_datos = {'promedio': promedio, 'max': max(distancias_clean), 'min': min(distancias_clean)}
-    return dict_datos
+    lista_output = []
+    with open(nombre_archivo, "w") as f:
+        for super in lista_supermercados:
+            # Se generan los datos
+            distancias = [distancia_recorrida(super, x) for x in boletas]
+            distancias_clean = [i for i in distancias if i!= 0]
+            promedio = str(int(stat.mean(distancias_clean)))
+            dict_datos = {'promedio': promedio, 'max': max(distancias_clean), 'min': min(distancias_clean)}
+            lista_output.append(dict_datos)
+
+            # Se escriben en el archivo.
+            f.write("DISTANCIAS RECORRIDAS\n")
+            f.write(" - Supermercado" + str(cont) + "- \n")
+            f.write("\tDistancia promedio: " + str(promedio) + ".\n")
+            f.write("\tDistancia max: " + str(max(distancias_clean)) + ".\n" )
+            f.write("\tDistancia min: " + str(min(distancias_clean)) + ".\n")
+            f.write("\n")
+            cont += 1
+
+    return lista_output
 
 
