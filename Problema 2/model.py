@@ -244,6 +244,7 @@ def calcular_distancia(lista_supermercados, n=1000, nombre_archivo='distancias_r
     * retorna lista de diccionarios de las distancias recorridas en cada supermercado, KEYS: {promedio, max, min}.
     * además imprime datos en un archivo de nombre 'nombre_archivo'.
     '''
+
     boletas = generar_muestra(n)
     cont = 1
     lista_output = []
@@ -267,4 +268,19 @@ def calcular_distancia(lista_supermercados, n=1000, nombre_archivo='distancias_r
 
     return lista_output
 
+def calcular_kpis(lista_supermercados, nombre_archivo='kpis.txt'):
+    '''
+    KPIs
+    * Varianza de demanda (sección y pasillo).
+    * Variabilidad de promedio (sección y pasillo).
 
+    Input
+    * lista de supermercados.
+    * nombre_archivo -> nombre archivo de output, por default 'kpis.txt'.
+
+    Output
+    * retorna lista de diccionarios de los KPIs en cada supermercado, KEYS: {promedio, max, min}.
+    * además imprime datos en un archivo de nombre 'nombre_archivo'.
+    '''
+
+    return 0
