@@ -1,4 +1,5 @@
 import statistics as stat
+from Reader import *
 
 def intersect(a, b):
     if len(a) > len(b):
@@ -232,3 +233,29 @@ def distancia_recorrida(super, boleta):
 
     return (pasillos_A * 40) + (pasillos_B * 45) + (horizontal * 6) - 3
     
+def calcular_distancia(lista_supermercados, n=1000, nombre_archivo='distancias_recorridas.txt'):
+    '''
+    Input
+    * lista de supermercados.
+    * n -> numero de muestras, por default 1000.
+    * nombre_archivo -> nombre archivo de output, por default 'distancias_recorridas.txt'.
+
+    Output
+    * retorna lista de diccionarios de las distancias recorridas en cada supermercado, KEYS: {promedio, max, min}.
+    * además imprime datos en un archivo
+    '''
+    boletas = generar_muestra(n)
+    cont = 1
+    for super in lista_supermercados:
+        print(" - Supermercado {cont} - ")
+        visitas_por_pasillo = contador_visitas_por_pasillo(super, boletas)
+        distancias = [distancia_recorrida(super, x) for x in boletas]
+        distancias_clean = [i for i in distancias if i!= 0]
+        promedio = str(int(stat.mean(distancias_clean)))
+        print("\tDistancia promedio: " + promedio)
+        print("\tDistancia max: " + str(max(distancias_clean)))
+        print("\tDistancia min: " + str(min(distancias_clean)))
+        dict_datos = {'promedio': promedio, 'max': max(distancias_clean), 'min': min(distancias_clean)}
+    return dict_datos
+
+

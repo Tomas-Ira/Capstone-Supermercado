@@ -36,6 +36,7 @@ df_pasillos = pd.DataFrame(np.array(distribucion_demandas_por_pasillo),
 
 heat_map_2 = sns.heatmap(df_pasillos, robust=True, linewidths=0.05, cmap="rocket_r", ax=ax2)
 
+# Calcular distancia
 boletas = generar_muestra(1000)
 visitas_por_pasillo = contador_visitas_por_pasillo(super, boletas)
 distancias = [distancia_recorrida(super, x) for x in boletas]
@@ -44,6 +45,7 @@ promedio = str(int(stat.mean(distancias_clean)))
 print("Distancia promedio: " + promedio)
 print("Distancia max: " + str(max(distancias_clean)))
 print("Distancia min: " + str(min(distancias_clean)))
+#
 
 df_pasillos_muestra = pd.DataFrame(np.array(visitas_por_pasillo), 
                     columns = ['P' + str(x) for x in range(1,16)],
