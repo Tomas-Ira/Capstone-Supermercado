@@ -1,5 +1,6 @@
 from data_work import ordenados
 from model import *
+from heatmap import heatmap_de_super, heatmap_de_super_pasillos, generar_figura_completa
 
 import numpy as np 
 import seaborn as sns
@@ -45,25 +46,38 @@ def emparejar_zonas(zona1, zona2):
     zona1.calcular_demanda()
     zona2.calcular_demanda()
 
+def asignar_zona_uniforme(pasillos, zona):
+    #Primero busco a que pasillo agregar la zona -> el con menor demanda
+    posicion = -1
+    min = 1000000
+    for i in range(len(pasillos)):
+        pasillo = pasillos[i]
+        if i < 15:
+            if len(pasillo.zonas) < 8:
+                if pasillo.demanda < min:
+                    min = pasillo.demanda
+                    posicion = i
+        else:
+            if len(pasillo.zonas) < 9:
+                if pasillo.demanda < min:
+                    min = pasillo.demanda
+                    posicion = i
+
+    #Agrego la zona
+    if posicion >= 0:
+        pasillo = pasillos[posicion]
+        pasillo.zonas.append(zona)
+        pasillo.calcular_demanda()
+
 super = Supermercado()
 super.poblar_fase_0(ordenados)
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14,6))
-fig.suptitle('Problema Supermercado - Fase 0 vs Iteracion 10', fontsize=18)
-ax1.set_title("Heatmap Fase 0")
-ax2.set_title("Heatmap Iteracion 10")
-
-distribucion_demandas = super.generar_heatmap()
-min_5, max_5 = top_5(distribucion_demandas)
-guardar_distribucion(super, min_5, max_5, "fase_0.txt")
-index_list = max_5 + [0,0,0,0,0] + min_5
-df = pd.DataFrame(np.array(distribucion_demandas), 
-                    columns = ['P' + str(x) for x in range(1,16)],
-                    index=[str(x) for x in range(1,18)])
-
-labels = df.applymap(lambda v: str(5 - (index_list.index(v)%10)) if v in index_list else '')
-
-heat_map_1 = sns.heatmap(df, robust=True, linewidths=0.05, annot=labels, annot_kws={'fontsize':12}, fmt='', cmap="rocket_r", ax=ax1)
+#Generamos heatmaps
+fig = generar_figura_completa(super, 'Problema Supermercado - Fase 0')
+show_all = input("Desea generar todos los heatmaps?\nYes --> 1\nNo ---> Cualquier tecla\nInput: ")
+if show_all == "1":
+    show_all = True
+#Heatmaps listos
 
 iteracion = 0
 text_1 = "Desviacion estandar iteracion "
@@ -78,8 +92,29 @@ for z in zonas:
         demandas_productos.append(int(p[1]))
 #print(sorted(demandas_productos))
 
-while iteracion <= 10:
+zonas_ordenadas = sorted(zonas, key=lambda x: x.demanda)
+#print(zonas_ordenadas[254].productos)
+#print(zonas_ordenadas[0].productos)
+demandas = [x.demanda for x in zonas_ordenadas]
+std_dev = int(stat.stdev(demandas))
+
+largo_it = len(str(iteracion))
+text_2 = ((3-largo_it)*" ") + str(iteracion) + ": " + str(std_dev)
+print(text_1 + text_2)
+
+while iteracion < 5:
+    iteracion += 1
+
+    #Comienza Algoritmo de swap Fase 1
+    #print([x.demanda for x in ordenadas])
     zonas_ordenadas = sorted(zonas, key=lambda x: x.demanda)
+    for i in range(127):
+        emparejar_zonas(zonas_ordenadas[i], zonas_ordenadas[254-i])
+    #Termina Algoritmo de swap Fase 1
+
+    if show_all:
+        fig = generar_figura_completa(super, 'Problema Supermercado - Iteracion ' + str(iteracion))
+
     #print(zonas_ordenadas[254].productos)
     #print(zonas_ordenadas[0].productos)
     demandas = [x.demanda for x in zonas_ordenadas]
@@ -89,25 +124,28 @@ while iteracion <= 10:
     text_2 = ((3-largo_it)*" ") + str(iteracion) + ": " + str(std_dev)
     print(text_1 + text_2)
 
-    #Comienza Algoritmo de swap Fase 1
-    #print([x.demanda for x in ordenadas])
-    for i in range(127):
-        emparejar_zonas(zonas_ordenadas[i], zonas_ordenadas[254-i])
-    #Termina Algoritmo de swap Fase 1
-
-    iteracion += 1
 
 
-distribucion_demandas = super.generar_heatmap()
-min_5, max_5 = top_5(distribucion_demandas)
-guardar_distribucion(super, min_5, max_5, "fase_1.txt")
-index_list = max_5 + [0,0,0,0,0] + min_5
-df = pd.DataFrame(np.array(distribucion_demandas), 
-                    columns = ['P' + str(x) for x in range(1,16)],
-                    index=[str(x) for x in range(1,18)])
+#Asignacion uniforme a pasillos
+zonas_ordenadas = sorted(zonas, key=lambda x: x.demanda, reverse=True)
 
-labels = df.applymap(lambda v: str(5 - (index_list.index(v)%10)) if v in index_list else '')
+pasillos = [Pasillo(x+1) for x in range(30)]
 
-heat_map_2 = sns.heatmap(df, robust=True, linewidths=0.05, annot=labels, annot_kws={'fontsize':12}, fmt='', cmap="rocket_r", ax=ax2)
+for i in range(30):
+    pasillos[i].zonas.append(zonas_ordenadas[i])
+    pasillos[i].calcular_demanda()
 
-#plt.show()
+for i in range(30, 255):
+    asignar_zona_uniforme(pasillos, zonas_ordenadas[i])
+
+for i in range(15):
+    pasillo_original = pasillos[i]
+    pasillo_desechable = pasillos[i+15]
+    for z in pasillo_desechable.zonas:
+        pasillo_original.zonas.append(z)
+
+super.pasillos = pasillos[:15]
+#Finaliza asignacion a pasillos
+
+fig = generar_figura_completa(super, 'Problema Supermercado - Fase 1')
+plt.show()

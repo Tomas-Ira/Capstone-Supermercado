@@ -124,6 +124,56 @@ class Supermercado:
                 demandas.append(z.demanda)
         return int(stat.pvariance(demandas))
 
+    def stdev_por_seccion(self):
+        demandas = []
+        for p in self.pasillos:
+            for z in p.zonas:
+                demandas.append(z.demanda)
+        return int(stat.stdev(demandas))
+
+    def stdev_por_pasillo(self):
+        demandas = []
+        for p in self.pasillos:
+            suma_1 = 0
+            suma_2 = 0
+            contador = 1
+            for z in p.zonas:
+                if contador <= 8:
+                    suma_1 += z.demanda
+                else:
+                    suma_2 += z.demanda
+                contador += 1
+            demandas.append(suma_1)
+            demandas.append(suma_2)
+        return int(stat.stdev(demandas))
+
+    def promedio_stdev_por_seccion(self):
+        desviaciones = []
+        for p in self.pasillos:
+            for z in p.zonas:
+                demandas_productos = []
+                for p in z.productos:
+                    demandas_productos.append(int(p[1]))
+                desviaciones.append(stat.stdev(demandas_productos))
+        return int(stat.mean(desviaciones))
+
+    def promedio_stdev_por_pasillo(self):
+        desviaciones = []
+        for p in self.pasillos:
+            demandas_pasillo_superior = []
+            demandas_pasillo_inferior = []
+            contador = 1
+            for z in p.zonas:
+                if contador <= 8:
+                    demandas_pasillo_superior.append(z.demanda)
+                else:
+                    demandas_pasillo_inferior.append(z.demanda)
+                contador += 1
+            desviaciones.append(stat.stdev(demandas_pasillo_superior))
+            desviaciones.append(stat.stdev(demandas_pasillo_inferior))
+        return int(stat.mean(desviaciones))
+
+
     def promedio(self):
         demandas = []
         for p in self.pasillos:

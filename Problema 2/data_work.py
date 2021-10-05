@@ -3,7 +3,7 @@ import sys
 import random
 
 print(sys.path[0])
-filename = "Popularities.csv"
+filename = "Problema 2/Popularities.csv"
 fields = []
 rows = []
 
