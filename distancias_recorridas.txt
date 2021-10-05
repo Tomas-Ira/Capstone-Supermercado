@@ -1,0 +1,12 @@
+DISTANCIAS RECORRIDAS
+ - Supermercado1- 
+	Distancia promedio: 327.
+	Distancia max: 1021.
+	Distancia min: 83.
+
+DISTANCIAS RECORRIDAS
+ - Supermercado2- 
+	Distancia promedio: 327.
+	Distancia max: 1021.
+	Distancia min: 83.
+

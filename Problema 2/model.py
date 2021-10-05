@@ -1,4 +1,5 @@
 import statistics as stat
+from Reader import *
 
 def intersect(a, b):
     if len(a) > len(b):
@@ -282,3 +283,54 @@ def distancia_recorrida(super, boleta):
 
     return (pasillos_A * 40) + (pasillos_B * 45) + (horizontal * 6) - 3
     
+def calcular_distancia(lista_supermercados, n=1000, nombre_archivo='distancias_recorridas.txt'):
+    '''
+    Input
+    * lista de supermercados.
+    * n -> numero de muestras, por default 1000.
+    * nombre_archivo -> nombre archivo de output, por default 'distancias_recorridas.txt'.
+
+    Output
+    * retorna lista de diccionarios de las distancias recorridas en cada supermercado, KEYS: {promedio, max, min}.
+    * además imprime datos en un archivo de nombre 'nombre_archivo'.
+    '''
+
+    boletas = generar_muestra(n)
+    cont = 1
+    lista_output = []
+    with open(nombre_archivo, "w") as f:
+        for super in lista_supermercados:
+            # Se generan los datos
+            distancias = [distancia_recorrida(super, x) for x in boletas]
+            distancias_clean = [i for i in distancias if i!= 0]
+            promedio = str(int(stat.mean(distancias_clean)))
+            dict_datos = {'promedio': promedio, 'max': max(distancias_clean), 'min': min(distancias_clean)}
+            lista_output.append(dict_datos)
+
+            # Se escriben en el archivo.
+            f.write("DISTANCIAS RECORRIDAS\n")
+            f.write(" - Supermercado" + str(cont) + "- \n")
+            f.write("\tDistancia promedio: " + str(promedio) + ".\n")
+            f.write("\tDistancia max: " + str(max(distancias_clean)) + ".\n" )
+            f.write("\tDistancia min: " + str(min(distancias_clean)) + ".\n")
+            f.write("\n")
+            cont += 1
+
+    return lista_output
+
+def calcular_kpis(lista_supermercados, nombre_archivo='kpis.txt'):
+    '''
+    KPIs
+    * Varianza de demanda (sección y pasillo).
+    * Variabilidad de promedio (sección y pasillo).
+
+    Input
+    * lista de supermercados.
+    * nombre_archivo -> nombre archivo de output, por default 'kpis.txt'.
+
+    Output
+    * retorna lista de diccionarios de los KPIs en cada supermercado, KEYS: {promedio, max, min}.
+    * además imprime datos en un archivo de nombre 'nombre_archivo'.
+    '''
+
+    return 0

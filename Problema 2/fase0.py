@@ -18,5 +18,14 @@ df = pd.DataFrame(np.array(distribucion_demandas),
 
 #labels = df.applymap(lambda v: str(5 - (index_list.index(v)%10)) if v in index_list else '')
 
+# ----- KPIs ----- 
+## Heat map
 heat_map_1 = sns.heatmap(df, robust=True, linewidths=0.05, annot_kws={'fontsize':12}, fmt='', cmap="rocket_r")
 plt.show()
+
+## Distancias
+lista_super = [super]
+distancias = calcular_distancia(super)
+
+## El resto de los KPIs: varianza de demanda (sección y pasillo) y variabilidad promedio (sección y pasillo).
+
