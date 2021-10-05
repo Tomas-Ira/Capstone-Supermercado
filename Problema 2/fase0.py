@@ -26,6 +26,3 @@ plt.show()
 ## Distancias
 lista_super = [super]
 distancias = calcular_distancia(super)
-
-## El resto de los KPIs: varianza de demanda (sección y pasillo) y variabilidad promedio (sección y pasillo).
-

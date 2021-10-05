@@ -72,11 +72,21 @@ def asignar_zona_uniforme(pasillos, zona):
 super = Supermercado()
 super.poblar_fase_0(ordenados)
 
+# Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
+## Borramos el archivo anterior
+archivo_distancias = 'distancias_recorridas.txt'
+with open(archivo_distancias, 'w') as f:
+    f.write("DISTANCIAS RECORRIDAS\n")
+
+dict_dist_f0 = calcular_distancia(super, "fase 0", nombre_archivo=archivo_distancias)
+
 #Generamos heatmaps
 fig = generar_figura_completa(super, 'Problema Supermercado - Fase 0')
 show_all = input("Desea generar todos los heatmaps?\nYes --> 1\nNo ---> Cualquier tecla\nInput: ")
 if show_all == "1":
     show_all = True
+else:
+    show_all = False
 #Heatmaps listos
 
 iteracion = 0
@@ -145,7 +155,15 @@ for i in range(15):
         pasillo_original.zonas.append(z)
 
 super.pasillos = pasillos[:15]
+super_fase1 = super
 #Finaliza asignacion a pasillos
 
+
+# Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
+dict_dist_f1 = calcular_distancia(super, "fase 1", nombre_archivo=archivo_distancias)
+
 fig = generar_figura_completa(super, 'Problema Supermercado - Fase 1')
+
+
+
 plt.show()
