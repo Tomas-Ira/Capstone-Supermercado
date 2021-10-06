@@ -1,6 +1,6 @@
 from data_work import ordenados
 from model import *
-from heatmap import generar_figura_completa_estacional, generar_figura_completa_estacional_stdev, grafico_evolucion_varianza
+from heatmap import generar_figura_completa_estacional, generar_figura_completa_estacional_stdev, grafico_evolucion_varianza, grafico_evolucion_distancia
 
 import numpy as np 
 import seaborn as sns
@@ -92,7 +92,7 @@ for producto in ordenados:
 
 super = Supermercado()
 super.poblar_fase_0_permanente(ordenados_permanentes)
-"""
+
 # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
 ## Borramos el archivo anterior
 archivo_distancias = 'distancias_recorridas.txt'
@@ -100,7 +100,6 @@ with open(archivo_distancias, 'w') as f:
     f.write("DISTANCIAS RECORRIDAS\n")
 
 dict_dist_f0 = calcular_distancia(super, "fase 0", nombre_archivo=archivo_distancias)
-"""
 
 #Generamos heatmaps
 show_all = input("Desea generar todos los heatmaps?\nYes --> 1\nNo ---> Cualquier tecla\nInput: ")
@@ -119,6 +118,8 @@ else:
 
 gen_var = input("Generar grafico de varianza?\nSi --> 1\nNo --> Cualquiera\nInput:")
 
+gen_dist = input("Generar grafico de distancias?\nSi --> 1\nNo --> Cualquiera\nInput:")
+
 if show_stdev:
     fig = generar_figura_completa_estacional_stdev(super, 'Problema Supermercado - Fase 0')
 else:
@@ -127,6 +128,9 @@ else:
 #Heatmaps listos
 
 varianzas = []
+distancias = []
+
+distancias.append(super.dict_distacia['promedio'])
 
 iteracion = 0
 text_1 = "Desviacion estandar iteracion "
@@ -152,8 +156,8 @@ varianzas.append(var)
 largo_it = len(str(iteracion))
 text_2 = ((3-largo_it)*" ") + str(iteracion) + ": " + str(std_dev)
 print(text_1 + text_2)
-if gen_var == '1':
-    n = 10
+if gen_var == '1' or gen_dist == '1':
+    n = 20
 else:
     n = 5
 while iteracion < n:
@@ -166,6 +170,10 @@ while iteracion < n:
         emparejar_zonas(zonas_ordenadas[i], zonas_ordenadas[227-i])
     #Termina Algoritmo de swap Fase 1
 
+    # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
+    dict_dist_iter = calcular_distancia(super, "fase 1", nombre_archivo=archivo_distancias)
+    distancias.append(super.dict_distacia['promedio'])
+    
     if show_all:
         if show_stdev:
             fig = generar_figura_completa_estacional_stdev(super, 'Problema Supermercado - Iteracion ' + str(iteracion))
@@ -206,11 +214,11 @@ for i in range(12):
 super.pasillos = pasillos[:15]
 super_fase1 = super
 #Finaliza asignacion a pasillos
-"""
+
 
 # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
 dict_dist_f1 = calcular_distancia(super, "fase 1", nombre_archivo=archivo_distancias)
-"""
+
 if show_stdev:
     fig = generar_figura_completa_estacional_stdev(super, 'Problema Supermercado - Fase 1')
 else:
@@ -221,3 +229,6 @@ plt.show()
 
 if gen_var == '1':
     grafico_evolucion_varianza(varianzas)
+
+if gen_dist == '1':
+    grafico_evolucion_distancia(distancias)

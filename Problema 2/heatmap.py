@@ -105,8 +105,8 @@ def generar_figura_completa_estacional(super, titulo):
     text_var_demanda_por_pasillo = ("Desv. Est. demanda por pasillo: " + str(super.stdev_por_pasillo_estacional()))
     text_promedio_stdev_por_seccion = "Promedio de desviacion estandar por seccion: " + str(super.promedio_stdev_por_seccion_estacional())
     text_promedio_stdev_por_pasillo = "Promedio de desviacion estandar por pasillo: " + str(super.promedio_stdev_por_pasillo_estacional())
-    #text_distancia_prom = "Distancia recorrida promedio: " + str(super.dict_distacia["promedio"])
-    #text_distancia_max_min = (f"Distancia recorrida [min, max]: [{super.dict_distacia['min']},{super.dict_distacia['max']}]")
+    text_distancia_prom = "Distancia recorrida promedio: " + str(super.dict_distacia["promedio"])
+    text_distancia_max_min = (f"Distancia recorrida [min, max]: [{super.dict_distacia['min']},{super.dict_distacia['max']}]")
     
     heat_map_1 = heatmap_de_super_estacional(super, axis=ax1)
     heat_map_2 = heatmap_de_super_pasillos_estacional(super, axis=ax2)
@@ -116,9 +116,9 @@ def generar_figura_completa_estacional(super, titulo):
     #ax2.set_xlabel(text_var_demanda_por_pasillo + '\n' + text_promedio_stdev_por_pasillo + '\n' + text_distancia_max_min,
     # position=(0., 1e6), horizontalalignment='left')
 
-    ax1.set_xlabel(text_var_demanda_por_seccion + '\n' + text_promedio_stdev_por_seccion,
+    ax1.set_xlabel(text_var_demanda_por_seccion + '\n' + text_promedio_stdev_por_seccion + '\n' + text_distancia_prom,
      position=(0., 1e6), horizontalalignment='left')
-    ax2.set_xlabel(text_var_demanda_por_pasillo + '\n' + text_promedio_stdev_por_pasillo,
+    ax2.set_xlabel(text_var_demanda_por_pasillo + '\n' + text_promedio_stdev_por_pasillo + '\n' + text_distancia_max_min,
      position=(0., 1e6), horizontalalignment='left')
 
     return fig
@@ -198,3 +198,20 @@ def generar_figura_completa_estacional_optima(super, titulo, demanda_por_seccion
      position=(0., 1e6), horizontalalignment='left')
 
     return fig
+
+def grafico_evolucion_distancia(distancias):
+    
+    iteraciones = []
+    for i in range(len(distancias)):
+        iteraciones.append(str(i))
+    distancias = [int(x) for x in distancias]
+
+    fig, (ax1) = plt.subplots(1, 1, figsize=(14,7))
+    fig.suptitle('Evolución distancia promedio por iteración', fontsize=18)
+    
+    ax1.ticklabel_format(useOffset=True, style='plain')
+    ax1.plot(iteraciones, distancias, color='red', marker='o')
+    plt.xlabel('Iteración', fontsize=14)
+    plt.ylabel('Distancia promedio', fontsize=14)
+    plt.grid(True)
+    plt.show()
