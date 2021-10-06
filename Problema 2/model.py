@@ -87,6 +87,41 @@ class Supermercado:
                 zona.calcular_demanda()
             pasillo.calcular_demanda()
 
+    def poblar_fase_0_permanente(self, productos):
+        for i in range(15):
+            pasillo = Pasillo(i+1)
+            if i < 12:
+                zonas = 17
+            else:
+                zonas = 8
+            for j in range(zonas):
+                zona = Zona(j+1)
+                pasillo.zonas.append(zona)
+            self.pasillos.append(pasillo)
+
+        zonas = []
+        for p in self.pasillos:
+            for z in p.zonas:
+                zonas.append(z)
+
+        for n in range(25):
+            for zona in zonas:
+                producto = productos.pop(0)
+                zona.productos.append(producto)
+            for i in range(len(zonas)):
+                producto = productos.pop(0)
+                zona = zonas[228 - i - 1]
+                zona.productos.append(producto)
+
+        productos_zona = []
+        for pasillo in self.pasillos:
+            for zona in pasillo.zonas:
+                zona.calcular_demanda()
+                productos_zona.append(len(zona.productos))
+            pasillo.calcular_demanda()
+        #print(productos_zona)
+        #print(len(productos_zona))
+
     def calcular_demanda(self):
         suma = 0
         for p in self.pasillos:
@@ -102,6 +137,46 @@ class Supermercado:
             for p in self.pasillos:
                 demanda_zona = p.zonas[i].demanda
                 columnas.append(demanda_zona)
+            filas.append(columnas)
+        return filas
+
+    def generar_heatmap_estacional(self):
+        filas = []
+        for i in range(17):
+            columnas = []
+            for j in range(len(self.pasillos)):
+                if i < 8:
+                    demanda_zona = self.pasillos[j].zonas[i].demanda
+                    columnas.append(demanda_zona)
+                else:
+                    if j < 12:
+                        demanda_zona = self.pasillos[j].zonas[i].demanda
+                        columnas.append(demanda_zona)
+                    else:
+                        columnas.append(0)
+            filas.append(columnas)
+        return filas
+
+    def generar_heatmap_estacional_stdev(self):
+        filas = []
+        for i in range(17):
+            columnas = []
+            for j in range(len(self.pasillos)):
+                if i < 8:
+                    productos = []
+                    for p in self.pasillos[j].zonas[i].productos:
+                        productos.append(int(p[1]))
+                    stdev_zona = int(stat.stdev(productos))
+                    columnas.append(stdev_zona)
+                else:
+                    if j < 12:
+                        productos = []
+                        for p in self.pasillos[j].zonas[i].productos:
+                            productos.append(int(p[1]))
+                        stdev_zona = int(stat.stdev(productos))
+                        columnas.append(stdev_zona)
+                    else:
+                        columnas.append(0)
             filas.append(columnas)
         return filas
 
@@ -133,6 +208,13 @@ class Supermercado:
                 demandas.append(z.demanda)
         return int(stat.stdev(demandas))
 
+    def stdev_por_seccion_estacional(self):
+        demandas = []
+        for p in self.pasillos:
+            for z in p.zonas:
+                demandas.append(z.demanda)
+        return int(stat.stdev(demandas))
+
     def stdev_por_pasillo(self):
         demandas = []
         for p in self.pasillos:
@@ -149,7 +231,34 @@ class Supermercado:
             demandas.append(suma_2)
         return int(stat.stdev(demandas))
 
+    def stdev_por_pasillo_estacional(self):
+        demandas = []
+        for p in self.pasillos:
+            suma_1 = 0
+            suma_2 = 0
+            contador = 1
+            for z in p.zonas:
+                if contador <= 8:
+                    suma_1 += z.demanda
+                else:
+                    suma_2 += z.demanda
+                contador += 1
+            demandas.append(suma_1)
+            if suma_2 > 0:
+                demandas.append(suma_2)
+        return int(stat.stdev(demandas))
+
     def promedio_stdev_por_seccion(self):
+        desviaciones = []
+        for p in self.pasillos:
+            for z in p.zonas:
+                demandas_productos = []
+                for p in z.productos:
+                    demandas_productos.append(int(p[1]))
+                desviaciones.append(stat.stdev(demandas_productos))
+        return int(stat.mean(desviaciones))
+
+    def promedio_stdev_por_seccion_estacional(self):
         desviaciones = []
         for p in self.pasillos:
             for z in p.zonas:
@@ -173,6 +282,23 @@ class Supermercado:
                 contador += 1
             desviaciones.append(stat.stdev(demandas_pasillo_superior))
             desviaciones.append(stat.stdev(demandas_pasillo_inferior))
+        return int(stat.mean(desviaciones))
+
+    def promedio_stdev_por_pasillo_estacional(self):
+        desviaciones = []
+        for p in self.pasillos:
+            demandas_pasillo_superior = []
+            demandas_pasillo_inferior = []
+            contador = 1
+            for z in p.zonas:
+                if contador <= 8:
+                    demandas_pasillo_superior.append(z.demanda)
+                else:
+                    demandas_pasillo_inferior.append(z.demanda)
+                contador += 1
+            desviaciones.append(stat.stdev(demandas_pasillo_superior))
+            if len(demandas_pasillo_inferior) > 0:
+                desviaciones.append(stat.stdev(demandas_pasillo_inferior))
         return int(stat.mean(desviaciones))
 
 
