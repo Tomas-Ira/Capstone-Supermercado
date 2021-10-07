@@ -422,20 +422,26 @@ def calcular_distancia(super, nombre, n=1000, nombre_archivo='distancias_recorri
     * retorna diccionario de las distancias recorridas en cada supermercado, KEYS: {promedio, max, min}.
     * además imprime datos en un archivo de nombre 'nombre_archivo'.
     '''
+    if n == -1:
+        # Usar todas las boletas.
+        boletas = datos_todos
+    else:
+        boletas = generar_muestra(n)
 
-    boletas = generar_muestra(n)
     with open(nombre_archivo, "a") as f:
         # Se generan los datos
         distancias = [distancia_recorrida(super, x) for x in boletas]
         distancias_clean = [i for i in distancias if i!= 0]
         promedio = str(int(stat.mean(distancias_clean)))
-        dict_datos = {'promedio': promedio, 'max': max(distancias_clean), 'min': min(distancias_clean)}
+        desv = str(int(stat.stdev(distancias_clean)))
+        dict_datos = {'promedio': promedio, 'max': max(distancias_clean), 'min': min(distancias_clean), 'desv': desv}
 
         # Se escriben en el archivo.
         f.write(" - Supermercado " + nombre + " - \n")
         f.write("\tDistancia promedio: " + str(promedio) + ".\n")
+        f.write("\tDesviación estándar: " + desv + ".\n")
         f.write("\tDistancia max: " + str(max(distancias_clean)) + ".\n" )
         f.write("\tDistancia min: " + str(min(distancias_clean)) + ".\n")
         f.write("\n")
     super.dict_distacia = dict_datos
-    return dict_datos
+    return dict_datos, distancias_clean

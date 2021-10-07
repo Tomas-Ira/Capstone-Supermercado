@@ -89,17 +89,22 @@ for producto in ordenados:
 
 #Ordenados permanentes tiene los productos no estacionales con los que se trabajara.
 
-
 super = Supermercado()
 super.poblar_fase_0_permanente(ordenados_permanentes)
 
 # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
+nro_boletas_muestra = -1   # -1 es todas.
 ## Borramos el archivo anterior
 archivo_distancias = 'distancias_recorridas.txt'
 with open(archivo_distancias, 'w') as f:
     f.write("DISTANCIAS RECORRIDAS\n")
 
-dict_dist_f0 = calcular_distancia(super, "fase 0", nombre_archivo=archivo_distancias)
+dict_dist_f0, distancias_f0 = calcular_distancia(super, "fase 0", nombre_archivo=archivo_distancias, n=nro_boletas_muestra)
+
+
+d_f0 = sns.displot(distancias_f0, kde=True)
+d_f0.set_titles("Distribución de Distancias - Fase 0", y=2)
+d_f0.set(xlabel="Distancias recorridas", title="\nDistribución de Distancias - Fase 0")
 
 #Generamos heatmaps
 show_all = input("Desea generar todos los heatmaps?\nYes --> 1\nNo ---> Cualquier tecla\nInput: ")
@@ -171,7 +176,7 @@ while iteracion < n:
     #Termina Algoritmo de swap Fase 1
 
     # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
-    dict_dist_iter = calcular_distancia(super, "fase 1", nombre_archivo=archivo_distancias)
+    dict_dist_iter, distancias_iter = calcular_distancia(super, "fase 1", nombre_archivo=archivo_distancias, n=nro_boletas_muestra)
     distancias.append(super.dict_distacia['promedio'])
     
     if show_all:
@@ -217,12 +222,15 @@ super_fase1 = super
 
 
 # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
-dict_dist_f1 = calcular_distancia(super, "fase 1", nombre_archivo=archivo_distancias)
+dict_dist_f1, distancias_f1 = calcular_distancia(super, "fase 2", nombre_archivo=archivo_distancias, n=nro_boletas_muestra)
+
+d_f1 = sns.displot(distancias_f1, kde=True)
+d_f1.set(xlabel="Distancias recorridas", title="\nDistribución de Distancias - Fase 2" )
 
 if show_stdev:
-    fig = generar_figura_completa_estacional_stdev(super, 'Problema Supermercado - Fase 1')
+    fig = generar_figura_completa_estacional_stdev(super, 'Problema Supermercado - Fase 2')
 else:
-    fig = generar_figura_completa_estacional(super, 'Problema Supermercado - Fase 1')
+    fig = generar_figura_completa_estacional(super, 'Problema Supermercado - Fase 2')
 
 
 plt.show()

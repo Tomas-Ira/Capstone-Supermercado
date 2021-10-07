@@ -9,6 +9,7 @@ def leer_datos():
     return all_tickets
 
 # Armar muestra
+datos_todos = leer_datos()
 def generar_muestra(numero):
     seed()
-    return sample(leer_datos(), numero)
+    return sample(datos_todos, numero)
