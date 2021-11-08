@@ -39,7 +39,10 @@ heat_map_2 = sns.heatmap(df_pasillos, robust=True, linewidths=0.05, cmap="rocket
 lista_supermercados = []
 lista_supermercados.append(super)
 lista_supermercados.append(super)
-lista = calcular_distancia(lista_supermercados)
+cont = 0
+for elem in lista_supermercados:
+    cont += 1
+    calcular_distancia(elem, f"Super {cont}")
 
 # Calcular visitas por pasillo por que abajo lo pide.
 boletas = generar_muestra(1000)

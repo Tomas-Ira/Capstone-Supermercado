@@ -41,3 +41,15 @@ DISTANCIAS RECORRIDAS
 	Distancia max: 1267.
 	Distancia min: 89.
 
+ - Supermercado Super 1 - 
+	Distancia promedio: 333.
+	Desviación estándar: 173.
+	Distancia max: 1021.
+	Distancia min: 83.
+
+ - Supermercado Super 2 - 
+	Distancia promedio: 338.
+	Desviación estándar: 172.
+	Distancia max: 947.
+	Distancia min: 83.
+
