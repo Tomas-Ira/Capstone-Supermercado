@@ -1,0 +1,7 @@
+DISTANCIAS RECORRIDAS
+ - Supermercado Max Distancia - 
+	Distancia promedio: 984.
+	Desviación estándar: 268.
+	Distancia max: 1267.
+	Distancia min: 119.
+

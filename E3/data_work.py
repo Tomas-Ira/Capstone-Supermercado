@@ -2,8 +2,9 @@ import csv
 import sys
 import random
 
-#print('Este es el path: ', sys.path[0])
-filename = "./Data/Popularities.csv"
+#print('Este es el path: ', sys.path[0], '\n')
+#filename = "./Data/Popularities.csv"
+filename = f"{sys.path[0]}/Data/Popularities.csv"
 fields = []
 rows = []
 

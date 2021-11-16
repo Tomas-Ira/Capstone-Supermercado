@@ -2,8 +2,8 @@ from seaborn.matrix import heatmap
 from fx_fase0 import *
 from fx_fase1 import *
 from fx_fase2 import *
+from generacion_de_recorridos import *
 from heatmap import generar_figura_completa_estacional, heatmap_pasillos_E3
-from fx_swap_pasillos import *
 
 import numpy as np 
 import seaborn as sns
@@ -29,9 +29,13 @@ supermercado = fase_2(supermercado)
 
 #heatmap = generar_figura_completa_estacional(supermercado, '3')
 #heatmap = heatmap_pasillos_E3(supermercado)
-plt.show()
-swap_pasillos(supermercado, 'A1', 'B2')
+#plt.show()
+
+
 #heatmap = heatmap_pasillos_E3(supermercado)
+#supermercado.distribucion_distancias("Min Distancia", -1)
+#print(supermercado.prom_distancia)
+
 #plt.show()
 
 

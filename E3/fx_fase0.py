@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import statistics as stat
 import csv
+import sys
 
 def fase_0():
     '''
@@ -23,7 +24,8 @@ def fase_0():
     
     '''Abrimos archivo con productos permanentes'''
     
-    filename = "Data/Productos Permanentes.csv"
+    #filename = "Data/Productos Permanentes.csv"
+    filename = f"{sys.path[0]}/Data/Productos Permanentes.csv"
     fields = []
     rows = []
 

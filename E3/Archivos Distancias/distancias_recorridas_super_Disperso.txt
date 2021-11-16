@@ -1,0 +1,7 @@
+DISTANCIAS RECORRIDAS
+ - Supermercado Disperso - 
+	Distancia promedio: 987.
+	Desviación estándar: 264.
+	Distancia max: 1267.
+	Distancia min: 89.
+

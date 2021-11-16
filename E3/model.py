@@ -1,4 +1,7 @@
 import statistics as stat
+import seaborn as sns
+import numpy as np
+from scipy.stats import kurtosis
 from Reader import *
 
 def intersect(a, b):
@@ -47,6 +50,11 @@ class Supermercado:
         self.pasillos = []
         self.demanda_total = 0
         self.dict_distacia = dict()
+        self.prom_distancia = 0
+        self.moda = 0
+        self.mediana = 0
+        self.curtosis = 0
+        self.desv = 0
 
     def poblar(self, productos):
         for i in range(15):
@@ -301,7 +309,6 @@ class Supermercado:
                 desviaciones.append(stat.stdev(demandas_pasillo_inferior))
         return int(stat.mean(desviaciones))
 
-
     def promedio(self):
         demandas = []
         for p in self.pasillos:
@@ -324,6 +331,32 @@ class Supermercado:
             demandas[0].append(suma_a)
             demandas[1].append(suma_b)
         return demandas
+
+    def distribucion_distancias(self, nombre, nro_boletas_muestra = 1000):
+        '''
+        Función que genera el gráfico de distribución de distancias de un supermercado. Imprime distancias en un archivo de nombre.
+        "distancias_recorridas_super_{nombre}.txt".
+
+        * nro_boletas_muestra = cantidad de boletas que considera el gráfico (-1 significa todas).
+        * nombre = nombre del supermercado. OJO: no incluir palabra SUPERMERCADO en este nombre.
+        
+        '''
+
+        # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
+        ## Borramos el archivo anterior
+        archivo_distancias = f'Archivos Distancias/distancias_recorridas_super_{nombre}.txt'
+        with open(archivo_distancias, 'w') as f:
+            f.write("DISTANCIAS RECORRIDAS\n")
+
+        boletas = generar_muestra(nro_boletas_muestra)
+
+        _dict_dist, distancias = calcular_distancia(self, nombre, boletas,
+         nombre_archivo=archivo_distancias)
+
+        d_f0 = sns.displot(distancias, kde=True)
+        tit = f"Distribución de Distancias - Supermercado {nombre}"
+        d_f0.set_titles(tit, y=2)
+        d_f0.set(xlabel=f"Distancias recorridas", title=tit)
 
 
 def top_5(lista):
@@ -409,37 +442,52 @@ def distancia_recorrida(super, boleta):
     horizontal = max(distancias)
 
     return (pasillos_A * 40) + (pasillos_B * 45) + (horizontal * 6) - 3
-    
-def calcular_distancia(super, nombre, n=1000, nombre_archivo='distancias_recorridas.txt'):
-    '''
-    Input
-    * super
-    * nombre -> str con el nombre del supermercado.
-    * n -> numero de muestras, por default 1000.
-    * nombre_archivo -> nombre archivo de output, por default 'distancias_recorridas.txt'.
 
-    Output
-    * retorna diccionario de las distancias recorridas en cada supermercado, KEYS: {promedio, max, min}.
-    * además imprime datos en un archivo de nombre 'nombre_archivo'.
+def generar_muestra(n=1000):
+    '''
+    Genera una muestra de boletas de tamaño n.
     '''
     if n == -1:
         # Usar todas las boletas.
         boletas = datos_todos
     else:
         boletas = generar_muestra(n)
+    
+    return boletas
+    
+def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorridas.txt'):
+    '''
+    Input
+    * super
+    * nombre -> str con el nombre del supermercado.
+    * boletas -> conjunto de boletas.
+    * nombre_archivo -> nombre archivo de output, por default 'distancias_recorridas.txt'.
+
+    Output
+    * retorna diccionario de las distancias recorridas en cada supermercado, KEYS: {promedio, max, min}.
+    * además imprime datos en un archivo de nombre 'nombre_archivo'.
+    '''
 
     with open(nombre_archivo, "a") as f:
         # Se generan los datos
         distancias = [distancia_recorrida(super, x) for x in boletas]
         distancias_clean = [i for i in distancias if i!= 0]
-        promedio = str(int(stat.mean(distancias_clean)))
-        desv = str(int(stat.stdev(distancias_clean)))
+        promedio = int(stat.mean(distancias_clean))
+        desv = int(stat.stdev(distancias_clean))
+        moda = int(stat.mode(distancias_clean))
+        mediana = int(stat.median(distancias_clean))
+        #kurtosis = int(kurtosis(distancias_clean))
         dict_datos = {'promedio': promedio, 'max': max(distancias_clean), 'min': min(distancias_clean), 'desv': desv}
 
+        # Guardamos los valores en la clase.
+        super.prom_distancia = promedio
+        super.moda = moda
+        super.mediana = mediana
+        super.desv = desv
         # Se escriben en el archivo.
         f.write(" - Supermercado " + nombre + " - \n")
         f.write("\tDistancia promedio: " + str(promedio) + ".\n")
-        f.write("\tDesviación estándar: " + desv + ".\n")
+        f.write("\tDesviación estándar: " + str(desv) + ".\n")
         f.write("\tDistancia max: " + str(max(distancias_clean)) + ".\n" )
         f.write("\tDistancia min: " + str(min(distancias_clean)) + ".\n")
         f.write("\n")
