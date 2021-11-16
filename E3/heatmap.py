@@ -6,6 +6,21 @@ import statistics as stat
 from Reader import *
 from model import *
 
+'''
+RESUMEN de funciones más importantes aquí:
+
+- generar_figura_completa_estacional(super, titulo)
+
+  Crea un heatmap con tanto la distribucion por pasillos como por secciones 
+  (es el que usamos generalmente para las entregas)
+  
+- heatmap_pasillos_E3(super, **kwargs)
+
+  Crea un heatmap donde se muestra la demanda por pasillo, tiene la peculiaridad de que se transpuso la matriz
+  
+Todas tienen return de un heatmap, después de usarlas hay que hacer plt.show()
+'''
+
 def heatmap_de_super(super, **kwargs):
     distribucion_demandas = super.generar_heatmap()
     df = pd.DataFrame(np.array(distribucion_demandas), 
@@ -80,10 +95,12 @@ def heatmap_de_super_estacional(super, **kwargs):
 
 def heatmap_de_super_pasillos_estacional(super, **kwargs):
     distribucion_demandas_por_pasillo = super.heatmap_pasillos()
+    '''
     boletas = generar_muestra(1)
     distribucion_demandas_por_pasillo = contador_visitas_por_pasillo(super, boletas)
     print(boletas)
     print(distribucion_demandas_por_pasillo)
+    '''
     df_pasillos = pd.DataFrame(np.array(distribucion_demandas_por_pasillo), 
                     columns = ['P' + str(x) for x in range(1,16)],
                     index=['A', 'B'])
@@ -221,3 +238,21 @@ def grafico_evolucion_distancia(distancias):
     plt.ylabel('Distancia promedio', fontsize=14)
     plt.grid(True)
     plt.show()
+    
+def heatmap_pasillos_E3(super, **kwargs):
+    distribucion_demandas_por_pasillo = super.heatmap_pasillos()
+    ejes_cambiados = []
+    for i in range(len(distribucion_demandas_por_pasillo[0])):
+            ejes_cambiados.append([distribucion_demandas_por_pasillo[0][i], distribucion_demandas_por_pasillo[1][i]])
+    distribucion_demandas_por_pasillo = ejes_cambiados
+    '''
+    boletas = generar_muestra(1)
+    distribucion_demandas_por_pasillo = contador_visitas_por_pasillo(super, boletas)
+    print(boletas)
+    print(distribucion_demandas_por_pasillo)
+    '''
+    df_pasillos = pd.DataFrame(np.array(distribucion_demandas_por_pasillo), 
+                    columns = ['A', 'B'],
+                    index=['P' + str(x) for x in range(1,16)])
+    
+    return sns.heatmap(df_pasillos, robust=True, linewidths=0.05, cmap="rocket_r", annot=True, fmt='g')

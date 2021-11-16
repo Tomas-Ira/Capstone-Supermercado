@@ -1,0 +1,19 @@
+DISTANCIAS RECORRIDAS
+ - Supermercado fase 0 - 
+	Distancia promedio: 420.
+	Desviación estándar: 217.
+	Distancia max: 1107.
+	Distancia min: 83.
+
+ - Supermercado fase 1 - 
+	Distancia promedio: 987.
+	Desviación estándar: 265.
+	Distancia max: 1267.
+	Distancia min: 311.
+
+ - Supermercado fase 2 - 
+	Distancia promedio: 980.
+	Desviación estándar: 267.
+	Distancia max: 1267.
+	Distancia min: 197.
+
