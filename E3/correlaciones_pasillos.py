@@ -80,7 +80,9 @@ def correlaciones_printer(correlaciones):
     TODO Imprime la lista de correlaciones ORDENADA en un archivo .txt llamado 'correlaciones_pasillos.txt'.
     '''
     print("Comenzando Sort\n")
-    print(np.sort(correlaciones))
+    sorted_corre = np.sort(correlaciones)
+    path = "Archivos Correlaciones/correlaciones_pasillos.txt"
+
     return
 
 correlaciones = create_correlaciones_list()
