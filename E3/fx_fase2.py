@@ -89,6 +89,7 @@ def fase_2(super):
     # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
     nro_boletas_muestra = 1000   # -1 es todas.
     archivo_distancias = 'distancias_recorridas.txt'
-    dict_dist_f1, distancias_f1 = calcular_distancia(super, "fase 2", nombre_archivo=archivo_distancias, n=nro_boletas_muestra)
+    boletas = generar_muestra(nro_boletas_muestra)
+    dict_dist_f1, distancias_f1 = calcular_distancia(super, "fase 2", boletas, nombre_archivo=archivo_distancias)
 
     return super

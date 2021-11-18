@@ -442,18 +442,7 @@ def distancia_recorrida(super, boleta):
     horizontal = max(distancias)
 
     return (pasillos_A * 40) + (pasillos_B * 45) + (horizontal * 6) - 3
-
-def generar_muestra(n=1000):
-    '''
-    Genera una muestra de boletas de tamaño n.
-    '''
-    if n == -1:
-        # Usar todas las boletas.
-        boletas = datos_todos
-    else:
-        boletas = generar_muestra(n)
     
-    return boletas
     
 def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorridas.txt'):
     '''

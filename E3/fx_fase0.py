@@ -56,7 +56,8 @@ def fase_0():
     with open(archivo_distancias, 'w') as f:
         f.write("DISTANCIAS RECORRIDAS\n")
 
-    dict_dist_f0, distancias_f0 = calcular_distancia(super, "fase 0", nombre_archivo=archivo_distancias, n=nro_boletas_muestra)
+    boletas = generar_muestra(nro_boletas_muestra)
+    dict_dist_f0, distancias_f0 = calcular_distancia(super, "fase 0", boletas, nombre_archivo=archivo_distancias)
     
     #fig = generar_figura_completa_estacional(super, 'Problema Supermercado - Fase 0')
     #plt.show()

@@ -11,5 +11,12 @@ def leer_datos():
 # Armar muestra
 datos_todos = leer_datos()
 def generar_muestra(numero):
-    seed()
-    return sample(datos_todos, numero)
+    if numero == -1:
+        # Usar todas las boletas.
+        boletas = datos_todos
+    else:
+        seed()
+        boletas = sample(datos_todos, numero)
+    
+    return boletas
+    
