@@ -358,7 +358,6 @@ class Supermercado:
         d_f0.set_titles(tit, y=2)
         d_f0.set(xlabel=f"Distancias recorridas", title=tit)
 
-
 def top_5(lista):
     lista_completa = []
     for l in lista:
@@ -442,7 +441,6 @@ def distancia_recorrida(super, boleta):
     horizontal = max(distancias)
 
     return (pasillos_A * 40) + (pasillos_B * 45) + (horizontal * 6) - 3
-    
     
 def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorridas.txt'):
     '''

@@ -3,17 +3,12 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import statistics as stat
-from Reader import *
+from Reader import generar_muestra, datos_todos
 from model import *
 from fx_fase0 import *
 from fx_fase1 import *
 from fx_fase2 import *
 from random import sample, seed
-
-def generar_muestra(numero):
-    datos_todos = leer_datos()
-    seed()
-    return sample(datos_todos, numero)
 
 supermercado = fase_0()
 supermercado = fase_1(supermercado)
@@ -27,7 +22,7 @@ for i in range(27):
     for j in range(27):
         correlaciones[i].append(0)
 
-boletas = leer_datos()
+boletas = generar_muestra(-1) # -1 implica todas las boletas.
 print('Numero de boletas:', len(boletas))
 primero = True
 contador = 0
