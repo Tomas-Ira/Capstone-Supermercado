@@ -92,14 +92,21 @@ def write_correlaciones(supermercado, correlaciones):
     '''
     Imprime la lista de correlaciones ORDENADA en un archivo .txt llamado 'correlaciones_pasillos.txt'.
     '''
-    path = "Archivos Correlaciones/correlaciones_pasillos.csv"
-    correlaciones_con_nombre = []
-
-    # Primero creamos una lista con tuplas ('pasillo_1', 'pasillo_2', correlacion_1_2).
-    # Acá se ignoran diagonales.
-    # También se ignorará correlaciones entre pasillos inferiores o superiores, esto es opcional, y se puede cambiar
-    # cambiando el valor de 'mezclar_pasillos'
+    # Se ignorará correlaciones entre pasillos inferiores o superiores, esto es opcional, y se puede cambiar
+    # cambiando el valor de 'mezclar_pasillos'. Es decir, si 'mezclar_pasillos' es false, se guarda las correlaciones en 
+    # dos archivos distintos.
     mezclar_pasillos = False
+    # Para el caso de que se quiera todo en un archivo ('mezclar pasillos = True')
+    correlaciones_con_nombre = []
+    path = "Archivos Correlaciones/correlaciones_pasillos.csv"
+    # Para el caso de que se quieran las correlaciones superiores e inferiores separadas('mezclar pasillos = False')
+    correlaciones_con_nombre_superior = []
+    correlaciones_con_nombre_inferior = []
+    path_superior = "Archivos Correlaciones/correlaciones_pasillos_sup.csv"
+    path_inferior = "Archivos Correlaciones/correlaciones_pasillos_inf.csv"
+        
+    # Primero cargamos la lista con tuplas ('pasillo_1', 'pasillo_2', correlacion_1_2).
+    # Acá se ignoran diagonales.
     for i in range(0, 27):
         for j in range(0, i): # Hasta i para sólo recorrer hasta diagonal.
             if DICT_INDICES_PASILLOS[i] != DICT_INDICES_PASILLOS[j]:
@@ -108,8 +115,12 @@ def write_correlaciones(supermercado, correlaciones):
                     correlaciones_con_nombre.append(tupla)
                 else:
                     if DICT_INDICES_PASILLOS[i][-1] == DICT_INDICES_PASILLOS[j][-1]: # Se compara la última letra del código (A o B)
-                        tupla = (DICT_INDICES_PASILLOS[i], DICT_INDICES_PASILLOS[j], correlaciones[i][j])
-                        correlaciones_con_nombre.append(tupla)
+                        if DICT_INDICES_PASILLOS[i][-1] == "A":
+                            tupla = (DICT_INDICES_PASILLOS[i], DICT_INDICES_PASILLOS[j], correlaciones[i][j])
+                            correlaciones_con_nombre_superior.append(tupla)
+                        else:
+                            tupla = (DICT_INDICES_PASILLOS[i], DICT_INDICES_PASILLOS[j], correlaciones[i][j])
+                            correlaciones_con_nombre_inferior.append(tupla)
 
 
     # Ahora, agregamos las demandas propias de cada pasillo.
@@ -120,18 +131,41 @@ def write_correlaciones(supermercado, correlaciones):
         for i in range(0, 15):
             # Pasillo A
             tupla = ("E", DICT_INDICES_PASILLOS[i], demandas[0][i])
-            correlaciones_con_nombre.append(tupla)
+            if mezclar_pasillos:
+                correlaciones_con_nombre.append(tupla)
+            else:
+                correlaciones_con_nombre_superior.append(tupla)
             # Pasillo B
             if i < 12:
                 tupla = ("E", DICT_INDICES_PASILLOS[i + 15], demandas[1][i])
-                correlaciones_con_nombre.append(tupla)
+                if mezclar_pasillos:
+                    correlaciones_con_nombre.append(tupla)
+                else:
+                    correlaciones_con_nombre_inferior.append(tupla)
+
 
     # Ahora, sorteamos según correlación.
-    correlaciones_con_nombre_ordenada = sorted(correlaciones_con_nombre, key=lambda tupla: tupla[2], reverse=True)
+    if mezclar_pasillos:
+        correlaciones_con_nombre_ordenada = sorted(correlaciones_con_nombre, key=lambda tupla: tupla[2], reverse=True)
+    else:
+        correlaciones_con_nombre_ordenada_sup = sorted(correlaciones_con_nombre_superior, key=lambda tupla: tupla[2], reverse=True)
+        correlaciones_con_nombre_ordenada_inf = sorted(correlaciones_con_nombre_inferior, key=lambda tupla: tupla[2], reverse=True)
 
     # Finalmente, imprimimos en el archivo.
-    with open(path, "w") as file:
-        for tupla in correlaciones_con_nombre_ordenada:
-            string = f"{tupla[0]},{tupla[1]},{tupla[2]}\n"
-            file.write(string)
-    return correlaciones_con_nombre_ordenada
+    if mezclar_pasillos:
+        with open(path, "w") as file:
+            for tupla in correlaciones_con_nombre_ordenada:
+                string = f"{tupla[0]},{tupla[1]},{tupla[2]}\n"
+                file.write(string)
+    else:
+        # Imprimimos superior
+        with open(path_superior, "w") as file:
+            for tupla in correlaciones_con_nombre_ordenada_sup:
+                string = f"{tupla[0]},{tupla[1]},{tupla[2]}\n"
+                file.write(string)
+        # Imprimimos inferior
+        with open(path_inferior, "w") as file:
+            for tupla in correlaciones_con_nombre_ordenada_inf:
+                string = f"{tupla[0]},{tupla[1]},{tupla[2]}\n"
+                file.write(string)
+    return 
