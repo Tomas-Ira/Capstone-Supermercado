@@ -317,6 +317,9 @@ class Supermercado:
         return int(stat.mean(demandas))
 
     def heatmap_pasillos(self):
+        '''
+        Retorna una matriz con las demandas de cada pasillo separados en A y B.
+        '''
         demandas = [[], []]
         for p in self.pasillos:
             contador = 0

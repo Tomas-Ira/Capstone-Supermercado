@@ -3,7 +3,9 @@ from fx_fase0 import *
 from fx_fase1 import *
 from fx_fase2 import *
 from generacion_de_recorridos import *
+from correlaciones_pasillos import *
 from heatmap import generar_figura_completa_estacional, heatmap_pasillos_E3
+
 
 import numpy as np 
 import seaborn as sns
