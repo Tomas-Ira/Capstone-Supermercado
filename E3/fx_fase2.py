@@ -90,5 +90,10 @@ def fase_2(super):
     archivo_distancias = 'distancias_recorridas.txt'
     boletas = generar_muestra(nro_boletas_muestra)
     dict_dist_f1, distancias_f1 = calcular_distancia(super, "fase 2", boletas, nombre_archivo=archivo_distancias)
+    
+    for pasillo in super.pasillos:
+        for z in range(len(pasillo.zonas)):
+            zona = pasillo.zonas[z]
+            zona.id = z + 1
 
     return super
