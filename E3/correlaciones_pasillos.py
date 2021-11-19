@@ -10,9 +10,6 @@ from fx_fase1 import *
 from fx_fase2 import *
 from random import sample, seed
 
-supermercado = fase_0()
-supermercado = fase_1(supermercado)
-supermercado = fase_2(supermercado)
 
 DICT_PASILLOS_INDICES = {"P1A": 0, 'P2A': 1,'P3A': 2, 'P4A': 3,'P5A': 4,'P6A': 5,'P7A': 6,'P8A': 7,'P9A': 8,'P10A': 9,'P11A': 10,'P12A': 11,
                 'P13A': 12,'P14A': 13, 'P15A': 14, 'P1B': 15, 'P2B': 16,'P3B': 17, 'P4B': 18,'P5B': 19,'P6B': 20,'P7B': 21,'P8B': 22,'P9B': 23,
@@ -40,7 +37,7 @@ def create_correlaciones_list():
             correlaciones[i].append(0)
     return correlaciones
 
-def load_correlaciones(correlaciones, n=-1):
+def load_correlaciones(supermercado, correlaciones, n=-1):
     '''
     Recorre todas las boletas y genera correlaciones entre pasillos, cargándolas en la lista 'correlaciones' de input, que debe 
     ser previamente creada con la función 'create_correlaciones_list'.
@@ -61,7 +58,7 @@ def load_correlaciones(correlaciones, n=-1):
             if pasillo_1 == 1:
                 for j in range(27):
                     pasillo_2 = visitas[j]
-                    if pasillo_1 == 1 and pasillo_2 == 1:
+                    if pasillo_1 == 1 and pasillo_2 == 1 and i != j:
                         correlaciones[i][j] += 1
         contador += 1
         if n == -1:
@@ -91,31 +88,43 @@ def heatmap_correlaciones(correlaciones):
     heat_map = sns.heatmap(df, robust=True, linewidths=0.05, annot_kws={'fontsize':12}, fmt='', cmap=color)
     plt.show()
 
-def write_correlaciones(correlaciones):
+def write_correlaciones(supermercado, correlaciones):
     '''
     Imprime la lista de correlaciones ORDENADA en un archivo .txt llamado 'correlaciones_pasillos.txt'.
     '''
     path = "Archivos Correlaciones/correlaciones_pasillos.csv"
     correlaciones_con_nombre = []
 
-    # Primero creamos una lista con tuplas ('pasillo_1', 'pasillo_2', correlacion_1_2). EJ:  
+    # Primero creamos una lista con tuplas ('pasillo_1', 'pasillo_2', correlacion_1_2).
+    # Acá se ignoran diagonales.
+    # También se ignorará correlaciones entre pasillos inferiores o superiores, esto es opcional, y se puede cambiar
+    # cambiando el valor de 'mezclar_pasillos'
+    mezclar_pasillos = False
     for i in range(0, 27):
-        for j in range(0, 27):
+        for j in range(0, i): # Hasta i para sólo recorrer hasta diagonal.
             if DICT_INDICES_PASILLOS[i] != DICT_INDICES_PASILLOS[j]:
-                #tupla = (DICT_INDICES_PASILLOS[i], DICT_INDICES_PASILLOS[j], correlaciones[i][j])
-                tupla = (i, j, correlaciones[i][j])
-                correlaciones_con_nombre.append(tupla)
+                if mezclar_pasillos:
+                    tupla = (DICT_INDICES_PASILLOS[i], DICT_INDICES_PASILLOS[j], correlaciones[i][j])
+                    correlaciones_con_nombre.append(tupla)
+                else:
+                    if DICT_INDICES_PASILLOS[i][-1] == DICT_INDICES_PASILLOS[j][-1]: # Se compara la última letra del código (A o B)
+                        tupla = (DICT_INDICES_PASILLOS[i], DICT_INDICES_PASILLOS[j], correlaciones[i][j])
+                        correlaciones_con_nombre.append(tupla)
+
 
     # Ahora, agregamos las demandas propias de cada pasillo.
-    demandas = supermercado.heatmap_pasillos()
-    for i in range(0, 15):
-        # Pasillo A
-        tupla = ("E", DICT_INDICES_PASILLOS[i], demandas[0][i])
-        correlaciones_con_nombre.append(tupla)
-        # Pasillo B
-        if i < 12:
-            tupla = ("E", DICT_INDICES_PASILLOS[i + 15], demandas[1][i])
+    # Esto a veces no es necesario, por lo que se depende de 'con_entrada'.
+    con_entrada = False
+    if con_entrada:
+        demandas = supermercado.heatmap_pasillos()
+        for i in range(0, 15):
+            # Pasillo A
+            tupla = ("E", DICT_INDICES_PASILLOS[i], demandas[0][i])
             correlaciones_con_nombre.append(tupla)
+            # Pasillo B
+            if i < 12:
+                tupla = ("E", DICT_INDICES_PASILLOS[i + 15], demandas[1][i])
+                correlaciones_con_nombre.append(tupla)
 
     # Ahora, sorteamos según correlación.
     correlaciones_con_nombre_ordenada = sorted(correlaciones_con_nombre, key=lambda tupla: tupla[2], reverse=True)
@@ -123,11 +132,6 @@ def write_correlaciones(correlaciones):
     # Finalmente, imprimimos en el archivo.
     with open(path, "w") as file:
         for tupla in correlaciones_con_nombre_ordenada:
-            string = f"{tupla[0]}, {tupla[1]}, {tupla[2]}\n"
+            string = f"{tupla[0]},{tupla[1]},{tupla[2]}\n"
             file.write(string)
     return correlaciones_con_nombre_ordenada
-
-correlaciones = create_correlaciones_list()
-correlaciones = load_correlaciones(correlaciones, -1)
-heatmap_correlaciones(correlaciones)
-write_correlaciones(correlaciones)

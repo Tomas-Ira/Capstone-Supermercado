@@ -24,6 +24,7 @@ class Zona:
 
     def calcular_demanda(self):
         suma = 0
+        self.set_productos = set()
         for p in self.productos:
             suma += int(p[1])
             self.set_productos.add(int(p[0]))
