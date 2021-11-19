@@ -478,7 +478,7 @@ def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorr
     * retorna diccionario de las distancias recorridas en cada supermercado, KEYS: {promedio, max, min}.
     * además imprime datos en un archivo de nombre 'nombre_archivo'.
     '''
-
+    print("Empezando ")
     with open(nombre_archivo, "a") as f:
         # Se generan los datos
         distancias = [distancia_recorrida(super, x) for x in boletas]

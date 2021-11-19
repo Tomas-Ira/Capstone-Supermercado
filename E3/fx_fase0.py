@@ -49,16 +49,6 @@ def fase_0():
     super = Supermercado()
     super.poblar_fase_0_permanente(ordenados_permanentes)
     
-    # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
-    nro_boletas_muestra = 1000   # -1 es todas.
-    ## Borramos el archivo anterior
-    archivo_distancias = 'distancias_recorridas.txt'
-    with open(archivo_distancias, 'w') as f:
-        f.write("DISTANCIAS RECORRIDAS\n")
-
-    boletas = generar_muestra(nro_boletas_muestra)
-    dict_dist_f0, distancias_f0 = calcular_distancia(super, "fase 0", boletas, nombre_archivo=archivo_distancias)
-    
     #fig = generar_figura_completa_estacional(super, 'Problema Supermercado - Fase 0')
     #plt.show()
     return super
