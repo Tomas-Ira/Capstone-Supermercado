@@ -85,7 +85,6 @@ def fase_2(super):
     super.pasillos = pasillos[:15]
     #Finaliza asignacion a pasillos
 
-
     # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
     nro_boletas_muestra = 1000   # -1 es todas.
     archivo_distancias = 'distancias_recorridas.txt'
