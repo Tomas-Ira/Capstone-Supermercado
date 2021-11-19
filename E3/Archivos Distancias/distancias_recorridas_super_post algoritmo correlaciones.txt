@@ -1,5 +1,5 @@
 DISTANCIAS RECORRIDAS
- - Supermercado Min Distancia - 
+ - Supermercado post algoritmo correlaciones - 
 	Distancia promedio: 436.
 	Desviación estándar: 214.
 	Distancia max: 1267.

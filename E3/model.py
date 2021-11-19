@@ -24,6 +24,7 @@ class Zona:
 
     def calcular_demanda(self):
         suma = 0
+        self.set_productos = set()
         for p in self.productos:
             suma += int(p[1])
             self.set_productos.add(int(p[0]))
@@ -317,6 +318,9 @@ class Supermercado:
         return int(stat.mean(demandas))
 
     def heatmap_pasillos(self):
+        '''
+        Retorna una matriz con las demandas de cada pasillo separados en A y B.
+        '''
         demandas = [[], []]
         for p in self.pasillos:
             contador = 0
