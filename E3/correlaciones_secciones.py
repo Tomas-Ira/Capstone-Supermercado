@@ -64,12 +64,79 @@ def load_correlaciones(supermercado, correlaciones, n=-1):
             print('Llevamos:', contador)
     return correlaciones
 
+def write_correlaciones(supermercado, correlaciones):
+    '''
+    Imprime la lista de correlaciones ORDENADA en un archivo .txt llamado 'correlaciones_secciones.txt'.
+    '''
+    # Se ignorará correlaciones entre pasillos inferiores o superiores, esto es opcional, y se puede cambiar
+    # cambiando el valor de 'mezclar_pasillos'. Es decir, si 'mezclar_pasillos' es false, se guarda las correlaciones en 
+    # dos archivos distintos.
+    # OJO no cambiar esto, no esta implementado el caso False
+    mezclar_pasillos = True
+    # Para el caso de que se quiera todo en un archivo ('mezclar pasillos = True')
+    correlaciones_con_nombre = []
+    path = "Archivos Correlaciones/correlaciones_secciones.csv"
+    # Para el caso de que se quieran las correlaciones superiores e inferiores separadas('mezclar secciones = False')
+    correlaciones_con_nombre_superior = []
+    correlaciones_con_nombre_inferior = []
+    path_superior = "Archivos Correlaciones/correlaciones_secciones_sup.csv"
+    path_inferior = "Archivos Correlaciones/correlaciones_secciones_inf.csv"
+        
+    correlaciones_finales = []
+    for i in range(len(correlaciones)):
+        for j in range(len(correlaciones[i])):
+            if j > i:
+                posicion_i = obtener_posicion_seccion(i)
+                posicion_j = obtener_posicion_seccion(j)
+                
+                correlaciones_finales.append([posicion_i, posicion_j, correlaciones[i][j]])
+    # Finalmente, imprimimos en el archivo.
+    if mezclar_pasillos:
+        with open(path, "w") as file:
+            correlaciones_finales = sorted(correlaciones_finales, key=lambda x: x[2], reverse=True)
+            for tupla in correlaciones_finales:
+                string = f"{tupla[0]},{tupla[1]},{tupla[2]}\n"
+                file.write(string)
+    else:
+        # Imprimimos superior
+        with open(path_superior, "w") as file:
+            for tupla in correlaciones_finales:
+                string = f"{tupla[0]},{tupla[1]},{tupla[2]}\n"
+                file.write(string)
+        # Imprimimos inferior
+        with open(path_inferior, "w") as file:
+            for tupla in correlaciones_finales:
+                string = f"{tupla[0]},{tupla[1]},{tupla[2]}\n"
+                file.write(string)
+    return
+
+def obtener_posicion_seccion(num):
+    pasillo = (num // 17) + 1
+    if pasillo > 12:
+        seccion = num - (12 * 17)
+        pasillo = 13 + (seccion // 8)
+    if pasillo < 13:
+        seccion = num - (17 * (pasillo - 1)) + 1
+    else:
+        seccion = num - (12 * 17) - ((pasillo - 13) * 8) + 1
+    if seccion <= 8:
+        letra = 'A'
+    else:
+        letra = 'B'
+    return 'P' + str(pasillo) + letra + '-' + str(seccion)
+        
+
 supermercado = fase_0()
 supermercado = fase_1(supermercado)
 supermercado = fase_2(supermercado)
 
 correlaciones = create_correlaciones_matrix()
-correlaciones = load_correlaciones(supermercado, correlaciones, n=1000)
+correlaciones = load_correlaciones(supermercado, correlaciones, n=-1)
+write_correlaciones(supermercado, correlaciones)
 
+'''
 for i in range(len(correlaciones)):
+    if i < 10:
         print(i+1, correlaciones[i])
+'''
+
