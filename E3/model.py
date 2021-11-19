@@ -487,7 +487,7 @@ def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorr
         desv = int(stat.stdev(distancias_clean))
         moda = int(stat.mode(distancias_clean))
         mediana = int(stat.median(distancias_clean))
-        #kurtosis = int(kurtosis(distancias_clean))
+        kurt = kurtosis(distancias_clean, fisher=False)
         dict_datos = {'promedio': promedio, 'max': max(distancias_clean), 'min': min(distancias_clean), 'desv': desv}
 
         # Guardamos los valores en la clase.
@@ -495,6 +495,7 @@ def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorr
         super.moda = moda
         super.mediana = mediana
         super.desv = desv
+        super.curtosis = kurt
         # Se escriben en el archivo.
         f.write(" - Supermercado " + nombre + " - \n")
         f.write("\tDistancia promedio: " + str(promedio) + ".\n")
