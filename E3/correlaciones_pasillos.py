@@ -95,7 +95,7 @@ def write_correlaciones(supermercado, correlaciones):
     # Se ignorará correlaciones entre pasillos inferiores o superiores, esto es opcional, y se puede cambiar
     # cambiando el valor de 'mezclar_pasillos'. Es decir, si 'mezclar_pasillos' es false, se guarda las correlaciones en 
     # dos archivos distintos.
-    mezclar_pasillos = True
+    mezclar_pasillos = False
     # Para el caso de que se quiera todo en un archivo ('mezclar pasillos = True')
     correlaciones_con_nombre = []
     path = "Archivos Correlaciones/correlaciones_pasillos.csv"

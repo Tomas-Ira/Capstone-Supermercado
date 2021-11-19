@@ -41,12 +41,6 @@ def fase_1(super):
             emparejar_zonas(zonas_ordenadas[i], zonas_ordenadas[227-i])
         #Termina Algoritmo de swaps Fase 1
         iteracion += 1
-        
-    # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
-    nro_boletas_muestra = 1000   # -1 es todas.
-    archivo_distancias = 'distancias_recorridas.txt'
-    boletas = generar_muestra(nro_boletas_muestra)
-    dict_dist_iter, distancias_iter = calcular_distancia(super, "fase 1", boletas, nombre_archivo=archivo_distancias)
     
     return super
 

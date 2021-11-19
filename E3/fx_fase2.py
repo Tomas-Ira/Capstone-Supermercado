@@ -84,12 +84,6 @@ def fase_2(super):
 
     super.pasillos = pasillos[:15]
     #Finaliza asignacion a pasillos
-
-    # Calculamos distancia recorrida, se imprimen en el archivo 'distancias_recorridas.txt'
-    nro_boletas_muestra = 1000   # -1 es todas.
-    archivo_distancias = 'distancias_recorridas.txt'
-    boletas = generar_muestra(nro_boletas_muestra)
-    dict_dist_f1, distancias_f1 = calcular_distancia(super, "fase 2", boletas, nombre_archivo=archivo_distancias)
     
     for pasillo in super.pasillos:
         for z in range(len(pasillo.zonas)):
