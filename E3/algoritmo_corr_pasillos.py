@@ -90,13 +90,14 @@ def algoritmo_correlaciones_2(path):
     '''
     INPUT: la lista puede ser de pasillo o de zonas.
     '''
-    posiciones_superiores = []
-    posiciones_inferiores = []
+    posiciones = []
     correlaciones = []
+    
     with open(path, "r") as file:
         for linea in file:
             linea_list = linea.strip().split(",")
             correlaciones.append(linea_list)
+    
     
 
 
