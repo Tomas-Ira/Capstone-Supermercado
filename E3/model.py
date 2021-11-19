@@ -413,6 +413,26 @@ def contador_visitas_por_pasillo(super, lista):
         final[1].append(pasillos[p])
     return final
 
+def contador_visitas_por_seccion(super, boleta):
+    secciones = []
+    for i in range(15):
+        secciones.append([])
+    for i in range(15):
+        for j in range(17):
+            if i < 12:
+                secciones[i].append(0)
+            else:
+                if j < 8:
+                    secciones[i].append(0)
+    
+    productos = set(boleta)
+    
+    for pasillo in super.pasillos:
+        for zona in pasillo.zonas:
+            if intersect(productos, zona.set_productos):
+                secciones[pasillo.id-1][zona.id-1] += 1
+    return secciones
+
 def distancia_recorrida(super, boleta):
     pasillos_A = 0
     pasillos_B = 0
