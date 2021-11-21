@@ -88,14 +88,13 @@ def heatmap_correlaciones(correlaciones):
     heat_map = sns.heatmap(df, robust=True, linewidths=0.05, annot_kws={'fontsize':12}, fmt='', cmap=color)
     plt.show()
 
-def write_correlaciones(supermercado, correlaciones):
+def write_correlaciones(supermercado, correlaciones, mezclar_pasillos=True):
     '''
     Imprime la lista de correlaciones ORDENADA en un archivo .txt llamado 'correlaciones_pasillos.txt'.
     '''
     # Se ignorará correlaciones entre pasillos inferiores o superiores, esto es opcional, y se puede cambiar
     # cambiando el valor de 'mezclar_pasillos'. Es decir, si 'mezclar_pasillos' es false, se guarda las correlaciones en 
     # dos archivos distintos.
-    mezclar_pasillos = False
     # Para el caso de que se quiera todo en un archivo ('mezclar pasillos = True')
     correlaciones_con_nombre = []
     path = "Archivos Correlaciones/correlaciones_pasillos.csv"
@@ -169,3 +168,24 @@ def write_correlaciones(supermercado, correlaciones):
                 string = f"{tupla[0]},{tupla[1]},{tupla[2]}\n"
                 file.write(string)
     return 
+
+def correlaciones_pasillo(supermercado, n=-1, write=False, mezclar=True):
+    '''
+    Función que compila todas las funciones que se encargan de la correlación entre pasillo.
+    INPUTs:
+     * supermercado
+     * n: cantidad de boletas usadas, -1 indica todas.
+     * write: boolean que indica si se debe escribir lista de correlaciones en archivos, por default es 'False'.
+     * mezclar: bolean que indica si se debe considerar correlaciones entre pasillos distintos (tipo A o B). 
+     Por defaulr es 'True'.
+
+     OUTPUT:
+      * retorna la matriz de correlaciones entre pasillos.
+    '''
+
+    correlaciones = create_correlaciones_list()
+    correlaciones = load_correlaciones(supermercado, correlaciones, n)
+    if write:
+        write_correlaciones(supermercado, correlaciones)
+
+    return correlaciones

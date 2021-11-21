@@ -153,7 +153,10 @@ def indice_mas_cercano(posiciones, esta_indice):
         top += 1
         bot -= 1
 
-def loader_correlaciones(path):
+def loader_correlaciones(path="Archivos Correlaciones/correlaciones_pasillos.csv"):
+    '''
+    Lee el archivo de correlaciones y lo carga en una lista.
+    '''
     correlaciones = []
     with open(path, "r") as file:
             for linea in file:
@@ -161,7 +164,10 @@ def loader_correlaciones(path):
                 correlaciones.append(linea_list)
     return correlaciones
 
-def algoritmo_correlaciones(correlaciones):
+def algoritmo_correlaciones(path="Archivos Correlaciones/correlaciones_pasillos.csv"):
+    # Primero cargamos los datos del archivo de correlaciones
+    correlaciones = loader_correlaciones(path)
+
     posiciones_sup = []
     posiciones_inf = []
     ya_ingresados = set()
@@ -257,11 +263,16 @@ def algoritmo_correlaciones(correlaciones):
                 # Se agregó el producto al final o se remplazo por un -1
                 continue
 
-    return
+    return posiciones_sup, posiciones_inf
 
 def pasillo_positioner(supermercado, posiciones_inf, posiciones_sup):
     '''
-    [P8A, P1A, P2A]
+    INPUTS
+     * supermercado
+     * posiciones_inf: lista con códigos de pasillos inferiores.
+     * posiciones_sup: lista con códigos de pasillos superiores.
+
+     Mueve los pasillos de 'supermercado' inicial, según las asignaciones de pasillos de las listas.
     '''
     # Creamos un dos listas, una para pasillo superiores y otra para inferiores
     pasillos_superiores = [Pasillo(x+1) for x in range(15)]
