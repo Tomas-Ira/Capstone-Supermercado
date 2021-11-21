@@ -25,7 +25,7 @@ n_boletas = 1000
 FASE_0 = False
 FASE_1 = False
 FASE_2 = False
-FASE_CORR = True
+FASE_CORR = False
 
 '** FASE 0'
 supermercado = fase_0()
@@ -51,12 +51,16 @@ if FASE_2:
 #correlaciones_pasillo(supermercado, n_boletas, False)
 
 ' ALGORITMO CORRELACIONES'
-p_sup_alg, p_inf_alg =algoritmo_correlaciones()
+p_sup_alg, p_inf_alg = algoritmo_correlaciones()
+#print("PASILLO SUPERIOR: \n", p_sup_alg)
+#print(len(p_sup_alg))
+#print("PASILLO INFERIOR: \n", p_inf_alg)
+#print(len(p_inf_alg))
 
 ' Asignación MANUAL'
 # Asignación MANUAL óptima de algoritmo correlaciones_pasillos (hecha por Coloro)
-p_sup, p_inf = ASIGNACION_OPTIMA_CORR_PASILLOS_MANUAL
-pasillo_positioner(supermercado, p_inf, p_sup_alg)
+#p_sup, p_inf = ASIGNACION_OPTIMA_CORR_PASILLOS_MANUAL
+#pasillo_positioner(supermercado, p_inf, p_sup_alg)
 
 if FASE_CORR:
     #heatmap_correlaciones(correlaciones)
