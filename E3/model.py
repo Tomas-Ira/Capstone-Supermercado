@@ -50,7 +50,7 @@ class Supermercado:
     def __init__(self):
         self.pasillos = []
         self.demanda_total = 0
-        self.dict_distacia = dict()
+        self.distancias = []
         self.prom_distancia = 0
         self.moda = 0
         self.mediana = 0
@@ -354,7 +354,7 @@ class Supermercado:
 
         boletas = generar_muestra(nro_boletas_muestra)
 
-        _dict_dist, distancias = calcular_distancia(self, nombre, boletas,
+        distancias = calcular_distancia(self, nombre, boletas,
          nombre_archivo=archivo_distancias)
 
         d_f0 = sns.displot(distancias, kde=True)
@@ -475,33 +475,41 @@ def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorr
     * nombre_archivo -> nombre archivo de output, por default 'distancias_recorridas.txt'.
 
     Output
-    * retorna diccionario de las distancias recorridas en cada supermercado, KEYS: {promedio, max, min}.
-    * además imprime datos en un archivo de nombre 'nombre_archivo'.
+    * imprime datos en un archivo de nombre 'nombre_archivo'.
+    * retorna lista con distancias
     '''
-    print("Empezando ")
-    with open(nombre_archivo, "a") as f:
-        # Se generan los datos
-        distancias = [distancia_recorrida(super, x) for x in boletas]
-        distancias_clean = [i for i in distancias if i!= 0]
-        promedio = int(stat.mean(distancias_clean))
-        desv = int(stat.stdev(distancias_clean))
-        moda = int(stat.mode(distancias_clean))
-        mediana = int(stat.median(distancias_clean))
-        kurt = kurtosis(distancias_clean, fisher=False)
-        dict_datos = {'promedio': promedio, 'max': max(distancias_clean), 'min': min(distancias_clean), 'desv': desv}
+    print("- Empezando a calcular distancias -")
+    # Se generan los datos
+    distancias = [distancia_recorrida(super, x) for x in boletas]
+    distancias_clean = [i for i in distancias if i!= 0] # Distancias sin 0s
+    print("- Terminado de calcular distancias -")
 
-        # Guardamos los valores en la clase.
-        super.prom_distancia = promedio
-        super.moda = moda
-        super.mediana = mediana
-        super.desv = desv
-        super.curtosis = kurt
+    #KPIs
+    promedio = int(stat.mean(distancias_clean))
+    desv = int(stat.stdev(distancias_clean))
+    moda = int(stat.mode(distancias_clean))
+    mediana = int(stat.median(distancias_clean))
+    kurt = kurtosis(distancias_clean, fisher=False)
+
+    # Guardamos los valores en la clase.
+    super.distancias = distancias_clean
+    super.prom_distancia = promedio
+    super.moda = moda
+    super.mediana = mediana
+    super.desv = desv
+    super.curtosis = kurt
+
+    # Escribimos en el archivo
+    with open(nombre_archivo, "a") as f:
         # Se escriben en el archivo.
         f.write(" - Supermercado " + nombre + " - \n")
         f.write("\tDistancia promedio: " + str(promedio) + ".\n")
         f.write("\tDesviación estándar: " + str(desv) + ".\n")
         f.write("\tDistancia max: " + str(max(distancias_clean)) + ".\n" )
+        f.write("\tMediana: " + str(mediana) + ".\n")
         f.write("\tDistancia min: " + str(min(distancias_clean)) + ".\n")
+        f.write("\tModa: " + str(moda) + ".\n")
+        f.write("\tCurtosis: " + str(kurt) + ".\n")
         f.write("\n")
-    super.dict_distacia = dict_datos
-    return dict_datos, distancias_clean
+
+    return distancias_clean
