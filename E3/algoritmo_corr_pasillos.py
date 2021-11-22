@@ -83,7 +83,6 @@ def algoritmo_correlaciones(supermercado):
 
     return supermercado
 
-
 def indice_mas_cercano(posiciones, esta_indice):
     top = esta_indice
     bot = esta_indice
@@ -105,7 +104,8 @@ def indice_mas_cercano(posiciones, esta_indice):
         top += 1
         bot -= 1
 
-def loader_correlaciones(path="./E3/Archivos Correlaciones/correlaciones_pasillos.csv"):
+#def loader_correlaciones(path="./E3/Archivos Correlaciones/correlaciones_pasillos.csv"):
+def loader_correlaciones(path="Archivos Correlaciones/correlaciones_pasillos.csv"):
     '''
     Lee el archivo de correlaciones y lo carga en una lista.
     '''

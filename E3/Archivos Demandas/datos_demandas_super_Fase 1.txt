@@ -1,0 +1,4 @@
+DATOS DEMANDA PASILLOS
+- Supermercado Fase 1 -
+	Promedio demanda por pasillo: 28873
+	Desv. estándar entre demandas de pasillo: 17355

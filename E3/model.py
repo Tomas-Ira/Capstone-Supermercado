@@ -50,6 +50,7 @@ class Supermercado:
     def __init__(self):
         self.pasillos = []
         self.demanda_total = 0
+        # Distancias
         self.distancias = []
         self.prom_distancia = 0
         self.moda = 0
@@ -224,7 +225,7 @@ class Supermercado:
                 demandas.append(z.demanda)
         return int(stat.stdev(demandas))
 
-    def stdev_por_pasillo(self):
+    def promedio_y_stdev_por_pasillo(self):
         demandas = []
         for p in self.pasillos:
             suma_1 = 0
@@ -238,7 +239,7 @@ class Supermercado:
                 contador += 1
             demandas.append(suma_1)
             demandas.append(suma_2)
-        return int(stat.stdev(demandas))
+        return int(stat.mean(demandas)), int(stat.stdev(demandas))
 
     def stdev_por_pasillo_estacional(self):
         demandas = []
@@ -336,6 +337,18 @@ class Supermercado:
             demandas[1].append(suma_b)
         return demandas
 
+    def write_datos_demanda(self, nombre):
+        demanda, stdev = self.promedio_y_stdev_por_pasillo()
+        string_titulo = f"- Supermercado {str(nombre)} -\n"
+        string_demanda = f"\tPromedio demanda por pasillo: {str(demanda)}\n"
+        string_stdev = f"\tDesv. estándar entre demandas de pasillo: {str(stdev)}\n"
+        path = f"Archivos Demandas/datos_demandas_super_{nombre}.txt"
+        with open(path, 'w') as file:
+            file.write("DEMANDA PASILLOS\n")
+            file.write(string_titulo)
+            file.write(string_demanda)
+            file.write(string_stdev)
+
     def distribucion_distancias(self, nombre, nro_boletas_muestra = 1000):
         '''
         Función que genera el gráfico de distribución de distancias de un supermercado. Imprime distancias en un archivo de nombre.
@@ -357,7 +370,7 @@ class Supermercado:
         distancias = calcular_distancia(self, nombre, boletas,
          nombre_archivo=archivo_distancias)
 
-        d_f0 = sns.displot(distancias, kde=True)
+        d_f0 = sns.displot(distancias, kde=False, bins = 12)
         tit = f"Distribución de Distancias - Supermercado {nombre}"
         d_f0.set_titles(tit, y=2)
         d_f0.set(xlabel=f"Distancias recorridas", title=tit)
@@ -462,9 +475,9 @@ def distancia_recorrida(super, boleta):
     for p in pasillos:
         n = int(p.strip('PAB'))
         distancias.append(n)
-    horizontal = max(distancias)
+    horizontal = max(distancias) - min(distancias)
 
-    return (pasillos_A * 40) + (pasillos_B * 45) + (horizontal * 6) - 3
+    return (pasillos_A * 40) + (pasillos_B * 45) + (horizontal * 6)
     
 def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorridas.txt'):
     '''
@@ -503,13 +516,13 @@ def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorr
     with open(nombre_archivo, "a") as f:
         # Se escriben en el archivo.
         f.write(" - Supermercado " + nombre + " - \n")
-        f.write("\tDistancia promedio: " + str(promedio) + ".\n")
-        f.write("\tDesviación estándar: " + str(desv) + ".\n")
-        f.write("\tDistancia max: " + str(max(distancias_clean)) + ".\n" )
-        f.write("\tMediana: " + str(mediana) + ".\n")
-        f.write("\tDistancia min: " + str(min(distancias_clean)) + ".\n")
-        f.write("\tModa: " + str(moda) + ".\n")
-        f.write("\tCurtosis: " + str(kurt) + ".\n")
+        f.write("\tDistancia promedio: " + str(promedio) + "\n")
+        f.write("\tDesviación estándar: " + str(desv) + "\n")
+        f.write("\tDistancia max: " + str(max(distancias_clean)) + "\n" )
+        f.write("\tMediana: " + str(mediana) + "\n")
+        f.write("\tDistancia min: " + str(min(distancias_clean)) + "\n")
+        f.write("\tModa: " + str(moda) + "\n")
+        f.write("\tCurtosis: " + str(kurt) + "\n")
         f.write("\n")
 
     return distancias_clean

@@ -26,10 +26,12 @@ def generar_swaps_secciones(n, supermercado, correlaciones):
         swaps = 0
         set_inamovibles = set()
         nuevos_codigos = {}
+        cont = 0
         while swaps < n:
-            print(nuevos_codigos, '\n')
+            cont += 1
+            #print(nuevos_codigos, '\n')
             info = next(csvreader)
-            print('Intento de hacer el swap ' + str(swaps + 1) + 'º\n')
+            print(f'{cont}. Intento de hacer el swap ' + str(swaps + 1) + 'º\n')
             #print(info, '\n')
             '''Determinamos que zonas requieren swap'''
             cod1 = info[0]
@@ -45,7 +47,7 @@ def generar_swaps_secciones(n, supermercado, correlaciones):
                 zona_de_swap_1 = cod1
             zona_de_swap_2 = seccion_menor_correlacion(estatico, correlaciones=correlaciones)
             if not(zona_de_swap_1 in set_inamovibles or zona_de_swap_2 in set_inamovibles):
-                print("Hacemos el swap", zona_de_swap_1, zona_de_swap_2,'\n')
+                #print("Hacemos el swap", zona_de_swap_1, zona_de_swap_2,'\n')
                 '''Hacemos el swap entre ambas secciones'''
                 swap_secciones(supermercado, zona_de_swap_1, zona_de_swap_2)
                 swaps += 1
@@ -58,8 +60,8 @@ def generar_swaps_secciones(n, supermercado, correlaciones):
                 nuevos_codigos[zona_de_swap_1] = zona_de_swap_2
                 nuevos_codigos[zona_de_swap_2] = zona_de_swap_1
             else:
-                print('***** SWAP FALLIDO *****')
-                print('No se hace el swap', estatico, zona_de_swap_1, zona_de_swap_2)
+                #print('***** SWAP FALLIDO *****')
+                #print('No se hace el swap', estatico, zona_de_swap_1, zona_de_swap_2)
                 #print(set_inamovibles, '\n')
                 pass
         
