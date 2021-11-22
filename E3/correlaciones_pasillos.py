@@ -186,6 +186,6 @@ def correlaciones_pasillo(supermercado, n=-1, write=False, mezclar=True):
     correlaciones = create_correlaciones_list()
     correlaciones = load_correlaciones(supermercado, correlaciones, n)
     if write:
-        write_correlaciones(supermercado, correlaciones)
+        write_correlaciones(supermercado, correlaciones, mezclar)
 
     return correlaciones
