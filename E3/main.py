@@ -9,6 +9,7 @@ from algoritmo_corr_pasillos import *
 from correlaciones_secciones import *
 from algoritmo_corr_secciones import *
 from constantes import *
+from simulador import *
 
 import numpy as np 
 import seaborn as sns
@@ -17,20 +18,31 @@ import pandas as pd
 import statistics as stat
 import csv
 
+from simulador import load_supermercado
+
 '''
 Se lleva a cabo la solución original del problema:
 FASE 0 -> FASE 1 -> FASE 2 -> FASE_CORR
 '''
 
-n_boletas = -1
-boletas = generar_muestra(n_boletas)
+'** LEER DATOS '
+simulada = False
+path_datos_simulados = "Boletas Simuladas/Boletas Simuladas.csv"
+
+if simulada:
+    ' Usar datos simulados'
+    #boletas = leer_datos_simulados(path_datos_simulados)
+else:
+    ' Usar datos orignales'
+    n_boletas = 1000
+    boletas = generar_muestra(n_boletas, simulada)
 
 # Booleans que sirven para mostrar los heatmaps de cada fase
-FASE_0 = True
+FASE_0 = False
 FASE_1 = False
 FASE_2 = False
 FASE_CORR = False
-FASE_CORR_ZONAS = False
+FASE_CORR_ZONAS = True
 
 
 '** FASE 0'
@@ -89,9 +101,9 @@ if FASE_CORR:
 
 '** FASE CORRELACIONES ZONAS'
 if FASE_CORR_ZONAS:
-    swaps = 10
+    swaps = 5
     correlaciones_sec = correlaciones_secciones(supermercado, boletas, False)
-    generar_swaps_secciones(swaps, supermercado, correlaciones_sec, 10000)
+    generar_swaps_secciones(swaps, supermercado, correlaciones_sec, 1000, simulada, path_datos_simulados)
 
 if FASE_CORR_ZONAS:
     string = f"Correlaciones Zonas, n={swaps}"
@@ -102,5 +114,11 @@ if FASE_CORR_ZONAS:
     #heatmap = generar_figura_completa_estacional(supermercado, '4')
     pass
 
+'** SIMULACIÓN'
+dict_posiciones = load_dict(supermercado)
+boletas_simuladas = leer_datos_simulados(path_datos_simulados)
+load_supermercado(dict_posiciones, boletas_simuladas)
+
 if FASE_0 or FASE_1 or FASE_2 or FASE_CORR or FASE_CORR_ZONAS:
-    plt.show()
+    #plt.show()
+    pass

@@ -3,7 +3,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import statistics as stat
-from Reader import generar_muestra, datos_todos
 from algoritmo_corr_pasillos import loader_correlaciones
 from model import *
 from fx_fase0 import *

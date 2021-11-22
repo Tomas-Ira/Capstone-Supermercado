@@ -3,7 +3,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import statistics as stat
-from Reader import generar_muestra, datos_todos
 from model import *
 from fx_fase0 import *
 from fx_fase1 import *
