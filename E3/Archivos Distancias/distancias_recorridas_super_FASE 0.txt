@@ -3,6 +3,8 @@ DISTANCIAS RECORRIDAS
 	Distancia promedio: 403
 	Desviación estándar: 212
 	Distancia max: 1184
+	Percentil 95: 834
+	Percentil 75: 514
 	Mediana: 382
 	Distancia min: 80
 	Moda: 80

@@ -37,7 +37,7 @@ def create_correlaciones_list():
             correlaciones[i].append(0)
     return correlaciones
 
-def load_correlaciones(supermercado, correlaciones, n=-1):
+def load_correlaciones(supermercado, correlaciones, boletas):
     '''
     Recorre todas las boletas y genera correlaciones entre pasillos, cargándolas en la lista 'correlaciones' de input, que debe 
     ser previamente creada con la función 'create_correlaciones_list'.
@@ -47,7 +47,6 @@ def load_correlaciones(supermercado, correlaciones, n=-1):
     
     * Retorna la matriz de correlaciones entre pasillos cargada con datos.
     '''
-    boletas = generar_muestra(n) # -1 implica todas las boletas.
     print('Numero de boletas:', len(boletas))
     contador = 0
     for boleta in boletas:
@@ -61,8 +60,7 @@ def load_correlaciones(supermercado, correlaciones, n=-1):
                     if pasillo_1 == 1 and pasillo_2 == 1 and i != j:
                         correlaciones[i][j] += 1
         contador += 1
-        if n == -1:
-            n = 88162
+        n = len(boletas)
         quarter = n/4
         half = n/2
         third_quarter = 3*n/4
@@ -169,7 +167,7 @@ def write_correlaciones(supermercado, correlaciones, mezclar_pasillos=True):
                 file.write(string)
     return 
 
-def correlaciones_pasillo(supermercado, n=-1, write=False, mezclar=True):
+def correlaciones_pasillo(supermercado, boletas, write=False, mezclar=True):
     '''
     Función que compila todas las funciones que se encargan de la correlación entre pasillo.
     INPUTs:
@@ -184,7 +182,7 @@ def correlaciones_pasillo(supermercado, n=-1, write=False, mezclar=True):
     '''
 
     correlaciones = create_correlaciones_list()
-    correlaciones = load_correlaciones(supermercado, correlaciones, n)
+    correlaciones = load_correlaciones(supermercado, correlaciones, boletas)
     if write:
         write_correlaciones(supermercado, correlaciones, mezclar)
 

@@ -23,6 +23,8 @@ FASE 0 -> FASE 1 -> FASE 2 -> FASE_CORR
 '''
 
 n_boletas = -1
+boletas = generar_muestra(n_boletas)
+
 # Booleans que sirven para mostrar los heatmaps de cada fase
 FASE_0 = True
 FASE_1 = False
@@ -39,18 +41,18 @@ if FASE_0:
     nombre = "Fase 0"
     #heatmap = generar_figura_completa_estacional(supermercado, '1')
     heatmap = heatmap_pasillos_E3(supermercado)
-    distancias = supermercado.distribucion_distancias(nombre, n_boletas)
+    distancias = supermercado.distribucion_distancias(nombre, boletas)
     supermercado.write_datos_demanda(nombre)
 
 '** FASE 1'
 if FASE_1 or FASE_2 or FASE_CORR or FASE_CORR_ZONAS:
-    supermercado = fase_1()
+    supermercado = fase_1(supermercado)
 
 if FASE_1:
     nombre = "Fase 1"
     #heatmap = generar_figura_completa_estacional(supermercado, '2')
     heatmap = heatmap_pasillos_E3(supermercado)
-    supermercado.distribucion_distancias(nombre, n_boletas)
+    supermercado.distribucion_distancias(nombre, boletas)
     supermercado.write_datos_demanda(nombre)
 
 '** FASE 2'
@@ -59,12 +61,12 @@ if FASE_2 or FASE_CORR or FASE_CORR_ZONAS:
 if FASE_2:
     nombre = "Fase 2"
     heatmap = heatmap_pasillos_E3(supermercado)
-    supermercado.distribucion_distancias("Fase 2", n_boletas)
+    supermercado.distribucion_distancias("Fase 2", boletas)
     supermercado.write_datos_demanda("Fase 2")
 
 '** FASE CORRELACIONES PASILLOS'
 if FASE_CORR or FASE_CORR_ZONAS:
-    correlaciones_pasillo(supermercado, n_boletas, True)
+    correlaciones_pasillo(supermercado, boletas, True)
 
     ' Asignación Algoritmo '
     p_sup, p_inf = algoritmo_correlaciones()
@@ -80,23 +82,22 @@ if FASE_CORR:
     #heatmap_correlaciones(correlaciones)
     nombre = "Correlaciones Pasillo"
     heatmap = heatmap_pasillos_E3(supermercado)
-    distancias = supermercado.distribucion_distancias(nombre, n_boletas)
+    distancias = supermercado.distribucion_distancias(nombre, boletas)
     supermercado.write_datos_demanda(nombre)
     #heatmap = generar_figura_completa_estacional(supermercado, '4')
     pass
 
-
 '** FASE CORRELACIONES ZONAS'
 if FASE_CORR_ZONAS:
-    swaps = 157
-    correlaciones_sec = correlaciones_secciones(supermercado, n_boletas, False)
-    generar_swaps_secciones(swaps, supermercado, correlaciones_sec)
+    swaps = 10
+    correlaciones_sec = correlaciones_secciones(supermercado, boletas, False)
+    generar_swaps_secciones(swaps, supermercado, correlaciones_sec, 10000)
 
 if FASE_CORR_ZONAS:
     string = f"Correlaciones Zonas, n={swaps}"
     #heatmap_correlaciones(correlaciones)
     heatmap = heatmap_pasillos_E3(supermercado)
-    distancias = supermercado.distribucion_distancias(string, n_boletas)
+    distancias = supermercado.distribucion_distancias(string, boletas)
     supermercado.write_datos_demanda(string)
     #heatmap = generar_figura_completa_estacional(supermercado, '4')
     pass

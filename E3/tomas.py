@@ -42,7 +42,6 @@ class Product:
                 contador += 1
         return contador
 
-
 def leer_datos():
     ventas = 0
     DATA = [i.strip().split() for i in open("./Data/retail.dat").readlines()]
@@ -56,7 +55,6 @@ def leer_datos():
             new_ticket.add_product(all_products[prod])
     return ventas
 
-
 def aparece_x_temporadas():
     aparece_x_temporada = {i: [] for i in range(1, TEMPORADAS+1)}
 
@@ -65,7 +63,6 @@ def aparece_x_temporadas():
             all_products[pid])
 
     return aparece_x_temporada
-
 
 def fase_1():
     aparece_x_temporada = aparece_x_temporadas()
@@ -101,13 +98,11 @@ def fase_1():
 
     return posiciones
 
-
 def mostrar(aparece_x_temporada):
     lista = {}
     for i in aparece_x_temporada:
         lista[i] = len(aparece_x_temporada[i])
     print(lista)
-
 
 def encaja(pos, prod):
     for i in range(len(pos)):
@@ -116,13 +111,11 @@ def encaja(pos, prod):
                 return False
     return True
 
-
 def agregar(pos, prod):
     for i in prod.seasons:
         if prod.seasons[i]:
             pos[i] = prod.id
     return pos
-
 
 def productos_permanentes():
     fase_1()
@@ -132,7 +125,6 @@ def productos_permanentes():
         if not all_products[pid].estacional:
             permanenetes.append(pid)
     return permanenetes
-
 
 # Imprimir análisis sobre productos y espacios temporales/permanentes
 def analisis_datos():
@@ -154,7 +146,6 @@ def analisis_datos():
     print("Meses promedio que se vende 1 producto permaente: ",
           meses_perm/(len(all_products) - prod_temp))
 
-
 # Crear archivo con ids de productos permanentes
 def escribir_uso_posiciones():
     permanentes = productos_permanentes()
@@ -166,7 +157,6 @@ def escribir_uso_posiciones():
             datos = [id]
             writer.writerow(datos)
 
-
 # Se llama en crear_boletas_n_prodcutos
 def crear_distribucion_productos(tickets):
     productos = []
@@ -174,7 +164,6 @@ def crear_distribucion_productos(tickets):
         for pid in tickets[bid].products:
             productos.append(pid)
     return productos
-
 
 # Se llama en crear_n_boletas
 def crear_boletas_n_productos(tickets, n):
@@ -192,14 +181,12 @@ def crear_boletas_n_productos(tickets, n):
             seen.add(new[0])
     return simulada
 
-
 # Se llama en crear_n_boletas
 def crear_largos(tickets):
     largos = []
     for bid in tickets:
         largos.append(len(tickets[bid].products))
     return largos
-
 
 def crear_n_boletas(n, tickets):
     boletas_simuladas = dict()
@@ -243,13 +230,11 @@ def chi_cuadrado(boletas):
 
     return valor
 
-
 def primeros_tickets(n):
     boletas = {}
     for i in range(n):
         boletas[i] = all_tickets[i]
     return boletas
-
 
 def print_graph_simulado(n, tickets):
     boletas = crear_n_boletas(n, tickets)
@@ -263,7 +248,6 @@ def print_graph_simulado(n, tickets):
     plt.bar(names, values)
     plt.show()
 
-
 def print_graph_real():
     boletas = all_tickets
     valores = []
@@ -273,7 +257,6 @@ def print_graph_real():
     largo = len(set(valores))
     plt.hist(valores, largo)
     plt.show()
-
 
 def indice_mas_cercano(posiciones, esta_indice):
     top = esta_indice
@@ -293,7 +276,6 @@ def indice_mas_cercano(posiciones, esta_indice):
             return bot - 1
         top += 1
         bot -= 1
-
 
 def algoritmo_correlaciones(correlaciones):
     posiciones_sup = []
@@ -408,11 +390,10 @@ def escribir_simuladas(n, tickets):
 ventas = leer_datos()
 
 
-print("VENTAS", ventas)
-print("TICKETS", len(all_tickets))
-print("PRODUCTOS", len(all_products))
-print("ESPACIOS", ESPACIOS)
-
+#print("VENTAS", ventas)
+#print("TICKETS", len(all_tickets))
+#print("PRODUCTOS", len(all_products))
+#print("ESPACIOS", ESPACIOS)
 
 
 escribir_simuladas(7347, all_tickets)
