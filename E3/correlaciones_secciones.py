@@ -37,7 +37,7 @@ def load_correlaciones(supermercado, correlaciones, n=-1):
     * Retorna la matriz de correlaciones entre secciones cargada con datos.
     '''
     boletas = generar_muestra(n) # -1 implica todas las boletas.
-    print('Numero de boletas:', len(boletas))
+    #print('Numero de boletas:', len(boletas))
     contador = 0
     for boleta in boletas:
         visitas = contador_visitas_por_seccion(supermercado, boleta)
@@ -53,7 +53,7 @@ def load_correlaciones(supermercado, correlaciones, n=-1):
                     seccion_2 = visitas_lista[j]
                     if seccion_2 == 1 and i != j:
                         correlaciones[i][j] += 1
-        
+        '''
         contador += 1
         if n == -1:
             n = 88162
@@ -62,6 +62,7 @@ def load_correlaciones(supermercado, correlaciones, n=-1):
         third_quarter = 3*n/4
         if contador in [int(quarter), int(half), int(third_quarter)]:
             print('Llevamos:', contador)
+        '''
     return correlaciones
 
 def write_correlaciones(supermercado, correlaciones):

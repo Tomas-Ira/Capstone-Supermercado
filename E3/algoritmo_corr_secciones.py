@@ -24,8 +24,10 @@ def generar_swaps_secciones(n, supermercado=supermercado, correlaciones=correlac
     with open('Archivos Correlaciones/correlaciones_secciones.csv', 'r') as file:
         csvreader = csv.reader(file)
         swaps = 0
+        set_inamovibles = set()
         while swaps < n:
             info = next(csvreader)
+            print('Intento de hacer el swap ' + str(swaps + 1) + 'º\n')
             print(info, '\n')
             '''Determinamos que zonas requieren swap'''
             cod1 = info[0]
@@ -36,12 +38,21 @@ def generar_swaps_secciones(n, supermercado=supermercado, correlaciones=correlac
             else:
                 zona_de_swap_1 = cod1
             zona_de_swap_2 = seccion_menor_correlacion(estatico, correlaciones=correlaciones)
-            '''Hacemos el swap entre ambas secciones'''
-            swap_secciones(supermercado, zona_de_swap_1, zona_de_swap_2)
-            swaps += 1
-            '''Recalculamos correlaciones entre secciones'''
-            correlaciones = create_correlaciones_matrix()
-            correlaciones = load_correlaciones(supermercado, correlaciones, n=1000)
+            if not(zona_de_swap_1 in set_inamovibles or zona_de_swap_2 in set_inamovibles):
+                print("Hacemos el swap", zona_de_swap_1, zona_de_swap_2,'\n')
+                '''Hacemos el swap entre ambas secciones'''
+                swap_secciones(supermercado, zona_de_swap_1, zona_de_swap_2)
+                swaps += 1
+                '''Recalculamos correlaciones entre secciones'''
+                correlaciones = create_correlaciones_matrix()
+                correlaciones = load_correlaciones(supermercado, correlaciones, n=1000)
+                '''Agregamos estatico y zonas de swap al set de inamovibles'''
+                set_inamovibles.add(estatico)
+                set_inamovibles.add(zona_de_swap_1)
+                set_inamovibles.add(zona_de_swap_2)
+            else:
+                print('No se hace el swap', estatico, zona_de_swap_1, zona_de_swap_2)
+                print(set_inamovibles, '\n')
         
 #obtener_listado_de_swaps(1)
 
@@ -209,4 +220,4 @@ def list_swapper(list1, indice1, list2, indice2):
     list1[indice1], list2[indice2] = list2[indice2], list1[indice1]
     return list1, list2
 
-generar_swaps_secciones(2)
+generar_swaps_secciones(5)
