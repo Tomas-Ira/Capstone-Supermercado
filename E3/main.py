@@ -24,18 +24,21 @@ FASE 0 -> FASE 1 -> FASE 2 -> FASE_CORR
 
 n_boletas = -1
 # Booleans que sirven para mostrar los heatmaps de cada fase
-FASE_0 = False
+FASE_0 = True
 FASE_1 = False
 FASE_2 = False
-FASE_CORR = True
+FASE_CORR = False
 FASE_CORR_ZONAS = False
 
 
 '** FASE 0'
 supermercado = fase_0()
 if FASE_0:
-    heatmap = generar_figura_completa_estacional(supermercado, '1')
+    #heatmap = generar_figura_completa_estacional(supermercado, '1')
+    distancias = supermercado.distribucion_distancias("FASE 0", n_boletas)
+    heatmap = heatmap_pasillos_E3(supermercado)
 
+'''
 '** FASE 1'
 supermercado = fase_1(supermercado)
 if FASE_1:
@@ -78,6 +81,6 @@ if FASE_CORR_ZONAS:
     distancias = supermercado.distribucion_distancias("post_algoritmo_correlaciones_zonas", n_boletas)
     #heatmap = generar_figura_completa_estacional(supermercado, '4')
     pass
-
+'''
 if FASE_0 or FASE_1 or FASE_2 or FASE_CORR or FASE_CORR_ZONAS:
     plt.show()

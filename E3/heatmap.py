@@ -128,8 +128,8 @@ def generar_figura_completa_estacional(super, titulo):
     text_var_demanda_por_pasillo = ("Desv. estándar demanda por pasillo: " + str(super.stdev_por_pasillo_estacional()))
     text_promedio_stdev_por_seccion = "Promedio de desv. estándar por seccion: " + str(super.promedio_stdev_por_seccion_estacional())
     text_promedio_stdev_por_pasillo = "Promedio de desv. estándar por pasillo: " + str(super.promedio_stdev_por_pasillo_estacional())
-    text_distancia_prom = "Distancia recorrida promedio: " + str(super.dict_distacia["promedio"])
-    text_distancia_desv = (f"Desv. estándar distancia recorrida: {super.dict_distacia['desv']}")
+    text_distancia_prom = "Distancia recorrida promedio: " + str(super.prom_distancia)
+    text_distancia_desv = (f"Desv. estándar distancia recorrida: {super.desv}")
 
     heat_map_1 = heatmap_de_super_estacional(super, axis=ax1)
     heat_map_2 = heatmap_de_super_pasillos_estacional(super, axis=ax2)
