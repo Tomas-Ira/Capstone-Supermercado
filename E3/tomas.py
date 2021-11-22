@@ -221,8 +221,7 @@ def crear_listas(boletas):
             lista.append(pid)
     return lista
 
-def chi_cuadrado(n, tickets):
-    boletas = crear_n_boletas(n, tickets)
+def chi_cuadrado(boletas):
     dist_bol = crear_distribucion(boletas)
     dist_real = crear_distribucion(all_tickets)
     valor = 0
@@ -376,6 +375,18 @@ def algoritmo_correlaciones(correlaciones):
 
     return
 
+def escribir_simuladas(n, tickets):
+    boletas = crear_n_boletas(n, tickets)
+
+    with open('Boletas Simuladas2.csv', 'w', newline="") as f:
+        writer = csv.writer(f)
+        for bid in boletas:
+            writer.writerow(boletas[bid].products)
+
+    print(chi_cuadrado(boletas))
+
+
+
 ventas = leer_datos()
 
 
@@ -385,8 +396,7 @@ ventas = leer_datos()
 #print("ESPACIOS", ESPACIOS)
 
 
-#print(chi_cuadrado(10000, all_tickets))
-
+escribir_simuladas(7347, all_tickets)
 #print_graph_simulado(100, all_tickets)
 #print_graph_real()
 
