@@ -12,7 +12,7 @@ from random import sample, seed
 import csv
 from correlaciones_secciones import *
 
-def generar_swaps_secciones(n, supermercado=supermercado, correlaciones=correlaciones):
+def generar_swaps_secciones(n, supermercado, correlaciones):
     '''
     Esta funcion genera n swaps de secciones en base a los valores de correlaciones entre estas
     
@@ -28,7 +28,7 @@ def generar_swaps_secciones(n, supermercado=supermercado, correlaciones=correlac
         while swaps < n:
             info = next(csvreader)
             print('Intento de hacer el swap ' + str(swaps + 1) + 'º\n')
-            print(info, '\n')
+            #print(info, '\n')
             '''Determinamos que zonas requieren swap'''
             cod1 = info[0]
             cod2 = info[1]
@@ -45,18 +45,19 @@ def generar_swaps_secciones(n, supermercado=supermercado, correlaciones=correlac
                 swaps += 1
                 '''Recalculamos correlaciones entre secciones'''
                 correlaciones = create_correlaciones_matrix()
-                correlaciones = load_correlaciones(supermercado, correlaciones, n=1000)
+                correlaciones = load_correlaciones_sec(supermercado, correlaciones, n=1000)
                 '''Agregamos estatico y zonas de swap al set de inamovibles'''
                 set_inamovibles.add(estatico)
                 set_inamovibles.add(zona_de_swap_1)
                 set_inamovibles.add(zona_de_swap_2)
             else:
                 print('No se hace el swap', estatico, zona_de_swap_1, zona_de_swap_2)
-                print(set_inamovibles, '\n')
+                #print(set_inamovibles, '\n')
+                pass
         
 #obtener_listado_de_swaps(1)
 
-def seccion_menor_correlacion(codigo, correlaciones=correlaciones):
+def seccion_menor_correlacion(codigo, correlaciones):
     '''
     Esta funcion recibe un codigo de una seccion y retorna el codigo de
     la seccion que tiene menor correlacion con esta y se encuentra en el mismo pasillo.
@@ -85,7 +86,7 @@ def seccion_menor_correlacion(codigo, correlaciones=correlaciones):
         fin_pasillo = inicio_pasillo + 17
         inicio_pasillo += 8
     lista_pasillo = fila[inicio_pasillo:fin_pasillo]
-    print(lista_pasillo, '\n')
+    #print(lista_pasillo, '\n')
     contador = 0
     minimo = 100000
     posicion_minimo = -1
@@ -219,5 +220,3 @@ def list_swapper(list1, indice1, list2, indice2):
     '''
     list1[indice1], list2[indice2] = list2[indice2], list1[indice1]
     return list1, list2
-
-generar_swaps_secciones(5)
