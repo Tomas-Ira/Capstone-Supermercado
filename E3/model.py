@@ -57,6 +57,8 @@ class Supermercado:
         self.mediana = 0
         self.curtosis = 0
         self.desv = 0
+        self.percentil75 = 0
+        self.percentil95 = 0
 
     def poblar(self, productos):
         for i in range(15):
@@ -237,9 +239,11 @@ class Supermercado:
                 else:
                     suma_2 += z.demanda
                 contador += 1
-            demandas.append(suma_1)
-            demandas.append(suma_2)
-        return int(stat.mean(demandas)), int(stat.stdev(demandas))
+            if suma_1 != 0:
+                demandas.append(suma_1)
+            if suma_2 != 0:
+                demandas.append(suma_2)
+        return int(max(demandas)), int(min(demandas)), int(stat.stdev(demandas))
 
     def stdev_por_pasillo_estacional(self):
         demandas = []
@@ -338,18 +342,21 @@ class Supermercado:
         return demandas
 
     def write_datos_demanda(self, nombre):
-        demanda, stdev = self.promedio_y_stdev_por_pasillo()
+        d_max, d_min, stdev = self.promedio_y_stdev_por_pasillo()
+
         string_titulo = f"- Supermercado {str(nombre)} -\n"
-        string_demanda = f"\tPromedio demanda por pasillo: {str(demanda)}\n"
         string_stdev = f"\tDesv. estándar entre demandas de pasillo: {str(stdev)}\n"
+        string_max = f"\tPasillo con más demanda: {str(d_max)}\n"
+        string_min = f"\tPasillo con menos demanda: {str(d_min)}\n"
         path = f"Archivos Demandas/datos_demandas_super_{nombre}.txt"
         with open(path, 'w') as file:
             file.write("DEMANDA PASILLOS\n")
             file.write(string_titulo)
-            file.write(string_demanda)
             file.write(string_stdev)
+            file.write(string_max)
+            file.write(string_min)
 
-    def distribucion_distancias(self, nombre, nro_boletas_muestra = 1000):
+    def distribucion_distancias(self, nombre, boletas):
         '''
         Función que genera el gráfico de distribución de distancias de un supermercado. Imprime distancias en un archivo de nombre.
         "distancias_recorridas_super_{nombre}.txt".
@@ -364,8 +371,6 @@ class Supermercado:
         archivo_distancias = f'Archivos Distancias/distancias_recorridas_super_{nombre}.txt'
         with open(archivo_distancias, 'w') as f:
             f.write("DISTANCIAS RECORRIDAS\n")
-
-        boletas = generar_muestra(nro_boletas_muestra)
 
         distancias = calcular_distancia(self, nombre, boletas,
          nombre_archivo=archivo_distancias)
@@ -503,6 +508,8 @@ def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorr
     moda = int(stat.mode(distancias_clean))
     mediana = int(stat.median(distancias_clean))
     kurt = kurtosis(distancias_clean, fisher=False)
+    percentil_75 = int(np.percentile(distancias_clean, 75))
+    percentil_95 = int(np.percentile(distancias_clean, 95))
 
     # Guardamos los valores en la clase.
     super.distancias = distancias_clean
@@ -511,6 +518,9 @@ def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorr
     super.mediana = mediana
     super.desv = desv
     super.curtosis = kurt
+    super.percentil75 = percentil_75
+    super.percentil95 = percentil_95
+    
 
     # Escribimos en el archivo
     with open(nombre_archivo, "a") as f:
@@ -519,6 +529,8 @@ def calcular_distancia(super, nombre, boletas, nombre_archivo='distancias_recorr
         f.write("\tDistancia promedio: " + str(promedio) + "\n")
         f.write("\tDesviación estándar: " + str(desv) + "\n")
         f.write("\tDistancia max: " + str(max(distancias_clean)) + "\n" )
+        f.write("\tPercentil 95: " + str(percentil_95) + "\n")
+        f.write("\tPercentil 75: " + str(percentil_75) + "\n")
         f.write("\tMediana: " + str(mediana) + "\n")
         f.write("\tDistancia min: " + str(min(distancias_clean)) + "\n")
         f.write("\tModa: " + str(moda) + "\n")

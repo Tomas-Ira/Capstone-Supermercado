@@ -1,10 +1,12 @@
 DISTANCIAS RECORRIDAS
- - Supermercado Correlaciones Zonas, n=50 - 
+ - Supermercado Correlaciones Zonas, n=10 - 
 	Distancia promedio: 403
 	Desviación estándar: 218
 	Distancia max: 1264
+	Percentil 75: 564
+	Percentil 95: 838
 	Mediana: 382
 	Distancia min: 80
 	Moda: 80
-	Curtosis: 2.9787271358603804
+	Curtosis: 2.981014477941704
 

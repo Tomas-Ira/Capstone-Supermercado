@@ -1,5 +1,5 @@
 DEMANDA PASILLOS
-- Supermercado Fase 2 -
+- Supermercado Correlaciones Pasillo -
 	Desv. estándar entre demandas de pasillo: 11261
 	Pasillo con más demanda: 73123
 	Pasillo con menos demanda: 26044

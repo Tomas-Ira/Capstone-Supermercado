@@ -1,0 +1,5 @@
+DEMANDA PASILLOS
+- Supermercado Correlaciones Zonas, n=5 -
+	Desv. estándar entre demandas de pasillo: 23327
+	Pasillo con más demanda: 148531
+	Pasillo con menos demanda: 25806
