@@ -131,8 +131,8 @@ supermercado = fase_1(supermercado)
 supermercado = fase_2(supermercado)
 
 correlaciones = create_correlaciones_matrix()
-correlaciones = load_correlaciones(supermercado, correlaciones, n=-1)
-write_correlaciones(supermercado, correlaciones)
+correlaciones = load_correlaciones(supermercado, correlaciones, n=1000)
+#write_correlaciones(supermercado, correlaciones)
 
 '''
 for i in range(len(correlaciones)):

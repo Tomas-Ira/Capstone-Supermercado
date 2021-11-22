@@ -89,5 +89,7 @@ def fase_2(super):
         for z in range(len(pasillo.zonas)):
             zona = pasillo.zonas[z]
             zona.id = z + 1
+        # También recalculamos la demanda en cada pasillo
+        pasillo.calcular_demanda()
 
     return super
