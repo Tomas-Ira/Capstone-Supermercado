@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import statistics as stat
 from Reader import generar_muestra, datos_todos
+from algoritmo_corr_pasillos import loader_correlaciones
 from model import *
 from fx_fase0 import *
 from fx_fase1 import *
@@ -26,7 +27,7 @@ def create_correlaciones_matrix():
             correlaciones[i].append(0)
     return correlaciones
 
-def load_correlaciones(supermercado, correlaciones, n=-1):
+def load_correlaciones_sec(supermercado, correlaciones, n=-1):
     '''
     Recorre todas las boletas y genera correlaciones entre secciones, cargándolas en la matriz 'correlaciones' de input, que debe 
     ser previamente creada con la función 'create_correlaciones_matrix'.
@@ -65,7 +66,7 @@ def load_correlaciones(supermercado, correlaciones, n=-1):
         '''
     return correlaciones
 
-def write_correlaciones(supermercado, correlaciones):
+def write_correlaciones_sec(supermercado, correlaciones):
     '''
     Imprime la lista de correlaciones ORDENADA en un archivo .txt llamado 'correlaciones_secciones.txt'.
     '''
@@ -126,18 +127,9 @@ def obtener_posicion_seccion(num):
         letra = 'B'
     return 'P' + str(pasillo) + letra + '-' + str(seccion)
         
-
-supermercado = fase_0()
-supermercado = fase_1(supermercado)
-supermercado = fase_2(supermercado)
-
-correlaciones = create_correlaciones_matrix()
-correlaciones = load_correlaciones(supermercado, correlaciones, n=1000)
-#write_correlaciones(supermercado, correlaciones)
-
-'''
-for i in range(len(correlaciones)):
-    if i < 10:
-        print(i+1, correlaciones[i])
-'''
-
+def correlaciones_secciones(supermercado, n=-1, write = False):
+    correlaciones = create_correlaciones_matrix()
+    correlaciones = load_correlaciones_sec(supermercado, correlaciones, n)
+    if write:
+        write_correlaciones_sec(supermercado, correlaciones)
+    return correlaciones
