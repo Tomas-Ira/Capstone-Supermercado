@@ -25,13 +25,19 @@ def generar_swaps_secciones(n, supermercado, correlaciones):
         csvreader = csv.reader(file)
         swaps = 0
         set_inamovibles = set()
+        nuevos_codigos = {}
         while swaps < n:
+            print(nuevos_codigos, '\n')
             info = next(csvreader)
             print('Intento de hacer el swap ' + str(swaps + 1) + 'º\n')
             #print(info, '\n')
             '''Determinamos que zonas requieren swap'''
             cod1 = info[0]
             cod2 = info[1]
+            if cod1 in nuevos_codigos.keys():
+                cod1 = nuevos_codigos[cod1]
+            if cod2 in nuevos_codigos.keys():
+                cod2 = nuevos_codigos[cod2]
             estatico = zona_estatica(supermercado, cod1, cod2)
             if estatico == cod1:
                 zona_de_swap_1 = cod2
@@ -48,9 +54,11 @@ def generar_swaps_secciones(n, supermercado, correlaciones):
                 correlaciones = load_correlaciones_sec(supermercado, correlaciones, n=1000)
                 '''Agregamos estatico y zonas de swap al set de inamovibles'''
                 set_inamovibles.add(estatico)
-                set_inamovibles.add(zona_de_swap_1)
                 set_inamovibles.add(zona_de_swap_2)
+                nuevos_codigos[zona_de_swap_1] = zona_de_swap_2
+                nuevos_codigos[zona_de_swap_2] = zona_de_swap_1
             else:
+                print('***** SWAP FALLIDO *****')
                 print('No se hace el swap', estatico, zona_de_swap_1, zona_de_swap_2)
                 #print(set_inamovibles, '\n')
                 pass
