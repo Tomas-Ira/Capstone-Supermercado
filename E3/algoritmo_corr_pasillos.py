@@ -165,6 +165,7 @@ def loader_correlaciones(path="Archivos Correlaciones/correlaciones_pasillos.csv
     return correlaciones
 
 def algoritmo_correlaciones(path="Archivos Correlaciones/correlaciones_pasillos.csv"):
+
     # Primero cargamos los datos del archivo de correlaciones
     correlaciones = loader_correlaciones(path)
 
@@ -185,6 +186,12 @@ def algoritmo_correlaciones(path="Archivos Correlaciones/correlaciones_pasillos.
     i = 0
     while len(ya_ingresados) < 27:
         cod1, cod2, _ = correlaciones[i]
+
+        print("PASILLO SUPERIOR: \n", posiciones_sup)
+        print("PASILLO INFERIOR: \n", posiciones_inf)
+        print("CÓDIGOS: ", cod1 , cod2)
+        print("-"*45)
+
         if cod1 in ya_ingresados and cod2 in ya_ingresados: 
             i += 1
             continue
@@ -218,8 +225,19 @@ def algoritmo_correlaciones(path="Archivos Correlaciones/correlaciones_pasillos.
                     cercano = indice_mas_cercano(posiciones_inf, indice)
 
             if cercano == "pendiente":
-                i += 1
-                continue
+                if i == 1:
+                    esta, falta, _ = correlaciones[0]
+                    if esta[-1] == "B":
+                        indice = posiciones_inf.index(esta)
+                        if falta[-1] == "A":
+                            cercano = indice_mas_cercano(posiciones_sup, indice)
+                            indice += 1
+                    if esta[-1] == "A":
+                        indice = posiciones_sup.index(esta)
+                    continue
+                else:
+                    i += 1
+                    continue
                 
             posiciones_inf.insert(cercano, falta)
             ya_ingresados.add(falta)
@@ -238,13 +256,12 @@ def algoritmo_correlaciones(path="Archivos Correlaciones/correlaciones_pasillos.
                 indice = posiciones_inf.index(esta)
             if esta[-1] == "A":
                 indice = posiciones_sup.index(esta)
-
             
             cercano = indice_mas_cercano(posiciones_sup, indice)
 
             if completo_inf or completo_sup:
                 while cercano == 0:
-                    indice += 2
+                    indice += 1
                     cercano = indice_mas_cercano(posiciones_inf, indice)
 
             if cercano == "pendiente":
@@ -262,7 +279,7 @@ def algoritmo_correlaciones(path="Archivos Correlaciones/correlaciones_pasillos.
             else:
                 # Se agregó el producto al final o se remplazo por un -1
                 continue
-
+    
     return posiciones_sup, posiciones_inf
 
 def pasillo_positioner(supermercado, posiciones_inf, posiciones_sup):
