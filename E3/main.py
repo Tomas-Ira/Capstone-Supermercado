@@ -30,6 +30,7 @@ FASE_2 = False
 FASE_CORR = True
 FASE_CORR_ZONAS = False
 
+
 '** FASE 0'
 supermercado = fase_0()
 if FASE_0:
