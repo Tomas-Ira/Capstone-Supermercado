@@ -112,7 +112,7 @@ class Supermercado:
         zonas = []
         for p in self.pasillos:
             for z in p.zonas:
-                zonas.append(z)
+                zonas.append(z) 
 
         for n in range(25):
             for zona in zonas:
