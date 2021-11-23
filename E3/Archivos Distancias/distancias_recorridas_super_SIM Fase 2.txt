@@ -1,0 +1,12 @@
+DISTANCIAS RECORRIDAS
+ - Supermercado SIM Fase 2 - 
+	Distancia promedio: 429
+	Desviación estándar: 217
+	Distancia max: 1264
+	Percentil 95: 838
+	Percentil 75: 578
+	Mediana: 402
+	Distancia min: 80
+	Moda: 80
+	Curtosis: 2.912148699041488
+

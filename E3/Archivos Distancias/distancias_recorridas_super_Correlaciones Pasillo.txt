@@ -1,12 +1,12 @@
 DISTANCIAS RECORRIDAS
  - Supermercado Correlaciones Pasillo - 
-	Distancia promedio: 424
-	Desviación estándar: 220
-	Distancia max: 1264
-	Percentil 75: 576
+	Distancia promedio: 425
+	Desviación estándar: 216
+	Distancia max: 1184
 	Percentil 95: 838
-	Mediana: 394
+	Percentil 75: 572
+	Mediana: 396
 	Distancia min: 80
 	Moda: 80
-	Curtosis: 2.8793630392916736
+	Curtosis: 2.983550162724273
 

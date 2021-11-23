@@ -1,0 +1,6 @@
+DEMANDA PASILLOS
+- Supermercado SIM Fase 0 -
+\Demanda promedio: 2574
+	Desv. estándar entre demandas de pasillo: 1836
+	Pasillo con más demanda: 11545
+	Pasillo con menos demanda: 1622

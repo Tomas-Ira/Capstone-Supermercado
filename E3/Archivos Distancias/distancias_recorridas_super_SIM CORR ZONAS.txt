@@ -1,0 +1,12 @@
+DISTANCIAS RECORRIDAS
+ - Supermercado SIM CORR ZONAS - 
+	Distancia promedio: 403
+	Desviación estándar: 218
+	Distancia max: 1264
+	Percentil 95: 838
+	Percentil 75: 564
+	Mediana: 382
+	Distancia min: 80
+	Moda: 80
+	Curtosis: 2.9768579244127387
+

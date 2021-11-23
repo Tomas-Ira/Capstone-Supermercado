@@ -1,0 +1,5 @@
+DEMANDA PASILLOS
+- Supermercado Fase 0 v2 -
+	Desv. estándar entre demandas de pasillo: 27637
+	Pasillo con más demanda: 168625
+	Pasillo con menos demanda: 22877

@@ -19,6 +19,7 @@ import statistics as stat
 import csv
 
 from simulador import load_supermercado
+from simulador import load_popularities
 
 '''
 Se lleva a cabo la solución original del problema:
@@ -27,17 +28,18 @@ FASE 0 -> FASE 1 -> FASE 2 -> FASE_CORR
 
 '** LEER DATOS '
 simulada = False
-path_datos_simulados = "Boletas Simuladas/Boletas Simuladas.csv"
+path_datos_simulados = "Boletas Simuladas/Boletas Simuladas2.csv"
 
 if simulada:
     ' Usar datos simulados'
     #boletas = leer_datos_simulados(path_datos_simulados)
 else:
     ' Usar datos orignales'
-    n_boletas = 1000
-    boletas = generar_muestra(n_boletas, simulada)
+    n_boletas = -1
+    boletas = generar_muestra(n_boletas, simulada, mensual=False)
 
 # Booleans que sirven para mostrar los heatmaps de cada fase
+SHOW = False
 FASE_0 = False
 FASE_1 = False
 FASE_2 = False
@@ -49,10 +51,10 @@ FASE_CORR_ZONAS = True
 if FASE_0 or FASE_1 or FASE_2 or FASE_CORR or FASE_CORR_ZONAS:
     supermercado = fase_0()
 
-if FASE_0:
+if FASE_0 and SHOW:
     nombre = "Fase 0"
     #heatmap = generar_figura_completa_estacional(supermercado, '1')
-    heatmap = heatmap_pasillos_E3(supermercado)
+    #heatmap = heatmap_pasillos_E3(supermercado)
     distancias = supermercado.distribucion_distancias(nombre, boletas)
     supermercado.write_datos_demanda(nombre)
 
@@ -60,7 +62,7 @@ if FASE_0:
 if FASE_1 or FASE_2 or FASE_CORR or FASE_CORR_ZONAS:
     supermercado = fase_1(supermercado)
 
-if FASE_1:
+if FASE_1 and SHOW:
     nombre = "Fase 1"
     #heatmap = generar_figura_completa_estacional(supermercado, '2')
     heatmap = heatmap_pasillos_E3(supermercado)
@@ -70,7 +72,7 @@ if FASE_1:
 '** FASE 2'
 if FASE_2 or FASE_CORR or FASE_CORR_ZONAS:    
     supermercado = fase_2(supermercado)
-if FASE_2:
+if FASE_2 and SHOW:
     nombre = "Fase 2"
     heatmap = heatmap_pasillos_E3(supermercado)
     supermercado.distribucion_distancias("Fase 2", boletas)
@@ -90,7 +92,7 @@ if FASE_CORR or FASE_CORR_ZONAS:
     ' Cambiamos los pasillos'
     pasillo_positioner(supermercado, p_inf, p_sup)
 
-if FASE_CORR:
+if FASE_CORR and SHOW:
     #heatmap_correlaciones(correlaciones)
     nombre = "Correlaciones Pasillo"
     heatmap = heatmap_pasillos_E3(supermercado)
@@ -103,9 +105,9 @@ if FASE_CORR:
 if FASE_CORR_ZONAS:
     swaps = 5
     correlaciones_sec = correlaciones_secciones(supermercado, boletas, False)
-    generar_swaps_secciones(swaps, supermercado, correlaciones_sec, 1000, simulada, path_datos_simulados)
+    generar_swaps_secciones(swaps, supermercado, correlaciones_sec, 10000, simulada, path_datos_simulados)
 
-if FASE_CORR_ZONAS:
+if FASE_CORR_ZONAS and SHOW:
     string = f"Correlaciones Zonas, n={swaps}"
     #heatmap_correlaciones(correlaciones)
     heatmap = heatmap_pasillos_E3(supermercado)
@@ -117,7 +119,15 @@ if FASE_CORR_ZONAS:
 '** SIMULACIÓN'
 dict_posiciones = load_dict(supermercado)
 boletas_simuladas = leer_datos_simulados(path_datos_simulados)
-load_supermercado(dict_posiciones, boletas_simuladas)
+popular = load_popularities(boletas_simuladas)
+
+supermercado = load_supermercado(dict_posiciones, popular)
+
+if not(SHOW):
+    string = "SIM CORR ZONAS"
+    #heatmap = heatmap_pasillos_E3(supermercado)
+    distancias = supermercado.distribucion_distancias(string, boletas)
+    supermercado.write_datos_demanda(string)
 
 if FASE_0 or FASE_1 or FASE_2 or FASE_CORR or FASE_CORR_ZONAS:
     #plt.show()

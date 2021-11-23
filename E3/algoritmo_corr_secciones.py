@@ -21,7 +21,7 @@ def generar_swaps_secciones(n, supermercado, correlaciones, n_boletas, simulada,
     * supermercado -> Supermercado() despues de fase 2
     * correlaciones -> matriz de 228 x 228 con correlaciones de secciones
     '''
-    boletas = generar_muestra(n_boletas, simulada, path_boletas_simuladas)
+    boletas = generar_muestra(n_boletas, simulada, False, path_boletas_simuladas)
 
     with open('Archivos Correlaciones/correlaciones_secciones.csv', 'r') as file:
         csvreader = csv.reader(file)

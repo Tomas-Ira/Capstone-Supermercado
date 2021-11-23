@@ -15,19 +15,24 @@ def leer_datos_simulados(path):
         all_tickets.append(DATA[ticket])
     return all_tickets
 
-
 # Armar muestra
-def generar_muestra(n, simulada, path_boletas_simulados="Boletas Simuladas/Boletas Simuladas.csv"):
+def generar_muestra(n, simulada, mensual=False, path_boletas_simulados="Boletas Simuladas/Boletas Simuladas.csv"):
     if simulada:
         datos_todos = leer_datos_simulados(path_boletas_simulados)
     else:
         datos_todos = leer_datos()
     if n == -1:
         # Usar todas las boletas.
-        boletas = datos_todos
+        if mensual:
+            boletas = datos_todos[:7347]
+        else:
+            boletas = datos_todos
     else:
         seed()
-        boletas = sample(datos_todos, n)
+        if mensual:
+            boletas = datos_todos[7347:]
+        else:
+            boletas = sample(datos_todos, n)
 
     return boletas
     

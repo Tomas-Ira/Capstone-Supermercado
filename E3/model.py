@@ -243,7 +243,7 @@ class Supermercado:
                 demandas.append(suma_1)
             if suma_2 != 0:
                 demandas.append(suma_2)
-        return int(max(demandas)), int(min(demandas)), int(stat.stdev(demandas))
+        return int(stat.mean(demandas)), int(max(demandas)), int(min(demandas)), int(stat.stdev(demandas))
 
     def stdev_por_pasillo_estacional(self):
         demandas = []
@@ -342,9 +342,10 @@ class Supermercado:
         return demandas
 
     def write_datos_demanda(self, nombre):
-        d_max, d_min, stdev = self.promedio_y_stdev_por_pasillo()
+        prom, d_max, d_min, stdev = self.promedio_y_stdev_por_pasillo()
 
         string_titulo = f"- Supermercado {str(nombre)} -\n"
+        string_prom = f"\tDemanda promedio: {str(prom)}\n"
         string_stdev = f"\tDesv. estándar entre demandas de pasillo: {str(stdev)}\n"
         string_max = f"\tPasillo con más demanda: {str(d_max)}\n"
         string_min = f"\tPasillo con menos demanda: {str(d_min)}\n"
@@ -352,6 +353,7 @@ class Supermercado:
         with open(path, 'w') as file:
             file.write("DEMANDA PASILLOS\n")
             file.write(string_titulo)
+            file.write(string_prom)
             file.write(string_stdev)
             file.write(string_max)
             file.write(string_min)
