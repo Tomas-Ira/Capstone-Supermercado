@@ -3,6 +3,7 @@ import csv
 import random
 import matplotlib.pyplot as plt
 from scipy.stats import chisquare
+import os
 
 ESPACIOS = 12750
 CLUSTERS = 85
@@ -44,7 +45,7 @@ class Product:
 
 def leer_datos():
     ventas = 0
-    DATA = [i.strip().split() for i in open("./Data/retail.dat").readlines()]
+    DATA = [i.strip().split() for i in open("./Capstone-Supermercado/Data/retail.dat").readlines()]
     for tic in range(len(DATA)):
         new_ticket = Ticket(tic)
         all_tickets[tic] = new_ticket
@@ -169,17 +170,12 @@ def crear_distribucion_productos(tickets):
 def crear_boletas_n_productos(tickets, n):
     productos = crear_distribucion_productos(tickets)
     simulada = random.sample(productos, n)
-
-    seen = set()
-    for pid in simulada:
-        if pid not in seen:
-            seen.add(pid)
-        else:
-            new = random.sample(productos, 1)
-            while new[0] in seen:
-                new = random.sample(productos, 1)
-            seen.add(new[0])
-    return simulada
+    seen = set(simulada)
+    
+    while len(seen) < n:
+        simulada = random.sample(productos, n-(len(seen)))
+        seen = set.union(seen, set(simulada))
+    return list(seen)
 
 # Se llama en crear_n_boletas
 def crear_largos(tickets):
@@ -200,10 +196,14 @@ def crear_n_boletas(n, tickets):
         for prod in boleta:
             new_ticket.add_product(all_products[prod])
 
+        if (tic%1000 == 0):
+            print(tic, "Tickets creados")
+
     return boletas_simuladas
 
 def crear_distribucion(boletas):
-    distribucion = {i: 0 for i in all_products}
+
+    distribucion = defaultdict(int)
     totales = 0
     for bid in boletas:
         for pid in boletas[bid].products:
@@ -221,9 +221,9 @@ def crear_listas(boletas):
             lista.append(pid)
     return lista
 
-def chi_cuadrado(boletas):
+def chi_cuadrado(boletas, reales):
     dist_bol = crear_distribucion(boletas)
-    dist_real = crear_distribucion(all_tickets)
+    dist_real = crear_distribucion(reales)
     valor = 0
     for i in dist_real:
         valor += ((dist_real[i]-dist_bol[i])**2)/dist_real[i]
@@ -378,25 +378,39 @@ def algoritmo_correlaciones(correlaciones):
 def escribir_simuladas(n, tickets):
     boletas = crear_n_boletas(n, tickets)
 
-    with open('Boletas Simuladas2.csv', 'w', newline="") as f:
+    with open('Boletas Simuladas con muestra7.csv', 'w', newline="") as f:
         writer = csv.writer(f)
         for bid in boletas:
             writer.writerow(boletas[bid].products)
 
-    print(chi_cuadrado(boletas))
+    print("Chi Cuadrado: ", chi_cuadrado(boletas, all_tickets))
 
 
 
 ventas = leer_datos()
 
 
-#print("VENTAS", ventas)
-#print("TICKETS", len(all_tickets))
-#print("PRODUCTOS", len(all_products))
-#print("ESPACIOS", ESPACIOS)
+print("VENTAS", ventas)
+print("TICKETS", len(all_tickets))
+print("PRODUCTOS", len(all_products))
+print("ESPACIOS", ESPACIOS)
+
+def subset_n_tickets(n):
+    llaves = random.sample(list(all_tickets.keys()), n)
+    tickets = {}
+    for i in llaves:
+        tickets[i] = all_tickets[i]
+    print("Listo el subset")
+    return tickets
 
 
-escribir_simuladas(7347, all_tickets)
+tickets = {}
+for i in range(7347):
+    tickets[i] = all_tickets[i]
+
+
+
+escribir_simuladas(7347, subset_n_tickets(70530))
 #print_graph_simulado(100, all_tickets)
 #print_graph_real()
 
