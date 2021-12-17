@@ -1,0 +1,12 @@
+DISTANCIAS RECORRIDAS
+ - Supermercado Fase 0 v2 - 
+	Distancia promedio: 399
+	Desviación estándar: 215
+	Distancia max: 1184
+	Percentil 95: 834
+	Percentil 75: 514
+	Mediana: 344
+	Distancia min: 80
+	Moda: 80
+	Curtosis: 2.9852707407331907
+

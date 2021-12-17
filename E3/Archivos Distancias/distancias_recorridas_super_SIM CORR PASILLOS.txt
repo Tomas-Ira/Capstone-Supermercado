@@ -1,0 +1,12 @@
+DISTANCIAS RECORRIDAS
+ - Supermercado SIM CORR PASILLOS - 
+	Distancia promedio: 424
+	Desviación estándar: 220
+	Distancia max: 1264
+	Percentil 95: 838
+	Percentil 75: 576
+	Mediana: 394
+	Distancia min: 80
+	Moda: 80
+	Curtosis: 2.8793630392916736
+

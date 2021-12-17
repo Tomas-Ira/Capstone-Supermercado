@@ -3,7 +3,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import statistics as stat
-from Reader import generar_muestra, datos_todos
 from algoritmo_corr_pasillos import loader_correlaciones
 from model import *
 from fx_fase0 import *
@@ -27,7 +26,7 @@ def create_correlaciones_matrix():
             correlaciones[i].append(0)
     return correlaciones
 
-def load_correlaciones_sec(supermercado, correlaciones, n=-1):
+def load_correlaciones_sec(supermercado, correlaciones, boletas):
     '''
     Recorre todas las boletas y genera correlaciones entre secciones, cargándolas en la matriz 'correlaciones' de input, que debe 
     ser previamente creada con la función 'create_correlaciones_matrix'.
@@ -37,7 +36,6 @@ def load_correlaciones_sec(supermercado, correlaciones, n=-1):
     
     * Retorna la matriz de correlaciones entre secciones cargada con datos.
     '''
-    boletas = generar_muestra(n) # -1 implica todas las boletas.
     #print('Numero de boletas:', len(boletas))
     contador = 0
     for boleta in boletas:
@@ -127,9 +125,9 @@ def obtener_posicion_seccion(num):
         letra = 'B'
     return 'P' + str(pasillo) + letra + '-' + str(seccion)
         
-def correlaciones_secciones(supermercado, n=-1, write = False):
+def correlaciones_secciones(supermercado, boletas, write = False):
     correlaciones = create_correlaciones_matrix()
-    correlaciones = load_correlaciones_sec(supermercado, correlaciones, n)
+    correlaciones = load_correlaciones_sec(supermercado, correlaciones, boletas)
     if write:
         write_correlaciones_sec(supermercado, correlaciones)
     return correlaciones

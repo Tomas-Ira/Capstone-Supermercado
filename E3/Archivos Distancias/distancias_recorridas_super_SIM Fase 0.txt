@@ -1,5 +1,5 @@
 DISTANCIAS RECORRIDAS
- - Supermercado Fase 0 - 
+ - Supermercado SIM Fase 0 - 
 	Distancia promedio: 403
 	Desviación estándar: 212
 	Distancia max: 1184

@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import statistics as stat
-from Reader import generar_muestra, datos_todos
+from Reader import generar_muestra
 from model import *
 from fx_fase0 import *
 from fx_fase1 import *
@@ -12,7 +12,7 @@ from random import sample, seed
 import csv
 from correlaciones_secciones import *
 
-def generar_swaps_secciones(n, supermercado, correlaciones):
+def generar_swaps_secciones(n, supermercado, correlaciones, n_boletas, simulada, path_boletas_simuladas):
     '''
     Esta funcion genera n swaps de secciones en base a los valores de correlaciones entre estas
     
@@ -21,6 +21,8 @@ def generar_swaps_secciones(n, supermercado, correlaciones):
     * supermercado -> Supermercado() despues de fase 2
     * correlaciones -> matriz de 228 x 228 con correlaciones de secciones
     '''
+    boletas = generar_muestra(n_boletas, simulada, False, path_boletas_simuladas)
+
     with open('Archivos Correlaciones/correlaciones_secciones.csv', 'r') as file:
         csvreader = csv.reader(file)
         swaps = 0
@@ -53,7 +55,7 @@ def generar_swaps_secciones(n, supermercado, correlaciones):
                 swaps += 1
                 '''Recalculamos correlaciones entre secciones'''
                 correlaciones = create_correlaciones_matrix()
-                correlaciones = load_correlaciones_sec(supermercado, correlaciones, n=1000)
+                correlaciones = load_correlaciones_sec(supermercado, correlaciones, boletas)
                 '''Agregamos estatico y zonas de swap al set de inamovibles'''
                 set_inamovibles.add(estatico)
                 set_inamovibles.add(zona_de_swap_2)

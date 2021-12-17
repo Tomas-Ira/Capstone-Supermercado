@@ -1,0 +1,6 @@
+DEMANDA PASILLOS
+- Supermercado SIM CORR PASILLOS -
+	Demanda promedio: 2574
+	Desv. estándar entre demandas de pasillo: 743
+	Pasillo con más demanda: 5050
+	Pasillo con menos demanda: 1912
